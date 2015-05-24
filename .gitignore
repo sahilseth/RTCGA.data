@@ -1,3 +1,6 @@
+data2/
+*cache*
+*_cache*
 # Created by https://www.gitignore.io
 
 ### R ###
