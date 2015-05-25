@@ -4,7 +4,7 @@ author: "Marcin Kosiński"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using RTCGA to download data as included in RTCGA.data}
+  %\VignetteIndexEntry{Using RTCGA to download clinical data as included in RTCGA.data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
