@@ -1,14 +1,35 @@
-# R package containing TCGA data
+---
+title: "R package containing TCGA data"
+author: "Marcin Kosiński"
+date: "`r Sys.Date()`"
+output: 
+   rmarkdown::html_vignette:
+      fig_width: 17
+      fig_height: 10
+      toc: true
+      toc_depth: 3
+      keep_md: true
+      includes:
+         in_header: include/in_header.html
+         before_body: include/before_body.html
+vignette: >
+  %\VignetteIndexEntry{home}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-Project is (will be) supported by [Travis CI](https://travis-ci.org/) and [waffle.io](https://waffle.io/).
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), cache=TRUE, eval = FALSE)
+```
 
 <h5> Installation of the `RTCGA` package: </h5>
 To get started, install the latest version of **RTCGA** from Bioconductor:
-```{Ruby}
+```{r}
 # not there yet
 ```
 or use:
-```{Ruby}
+```{r}
 if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
@@ -20,11 +41,11 @@ Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) insta
 
 <h5> Installation of the `RTCGA.data` package: </h5>
 Install the latest version of **RTCGA.data** from Bioconductor:
-```{Ruby}
+```{r}
 # not there yet
 ```
 or use:
-```{Ruby}
+```{r}
 if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
@@ -33,7 +54,7 @@ install_github("mi2-warsaw/RTCGA.data")
 ```
 
 <h5> The list of available datasets: </h5>
-```{Ruby}
+```{r}
 library(RTCGA.data)
 ?clinical
 ?rnaseq

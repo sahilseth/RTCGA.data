@@ -10,10 +10,35 @@
 
 <meta name="author" content="Marcin Kosiński" />
 
-<meta name="date" content="2015-05-24" />
+<meta name="date" content="2015-05-26" />
 
-<title>Using RTCGA package to download clinical data that are included in RTCGA.data</title>
+<title>Using RTCGA package to download rna-seq data that are included in RTCGA.data</title>
 
+
+<style type="text/css">
+  /* padding for bootstrap navbar */
+  body {
+    padding-top: 50px;
+    padding-bottom: 40px;
+  }
+/* offset scroll position for anchor links (for fixed navbar) */
+  .section h2 {
+    padding-top: 55px;
+    margin-top: -55px;
+  }
+.section h3 {
+  padding-top: 55px;
+  margin-top: -55px;
+}
+/* don't use link color in navbar */
+.dropdown-menu>li>a {
+color: black;
+}
+/* some padding for disqus */
+#disqus_thread {
+margin-top: 45px;
+}
+</style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -50,13 +75,66 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <body>
 
 
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  </button>
+  <a class="navbar-brand" href="http://mi2-warsaw.github.io/RTCGA.data/">RTCGA.data</a>
+  </div>
+  <div id="navbar" class="navbar-collapse collapse">
+  <ul class="nav navbar-nav">
+  
+  <li class="dropdown">
+  <a href="authoring" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Github Project <span class="caret"></span></a>
+  <ul class="dropdown-menu" role="menu">
+  <li class="dropdown-header">RTCGA.data</li>
+  <li><a href="https://github.com/mi2-warsaw/RTCGA.data/tarball/master">Download tar</a></li>
+  <li><a href="https://github.com/mi2-warsaw/RTCGA.data/zipball/master">Download zip</a></li>
+  <li><a href="https://github.com/mi2-warsaw/RTCGA.data">View on GitHub</a></li>
+
+  </ul>
+  
+  
+   <li class="dropdown">
+   <a href="authoring" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Getting data<span class="caret"></span></a>
+   <ul class="dropdown-menu" role="menu">
+      <li class="dropdown-header">Checked for ver 1.0</li>
+  <li><a href="downloading_clinical_datasets.html">Clinical</a></li>
+   <li><a href="downloading_rnaseq_datasets.html">rnaseq</a></li>
+  </ul>
+  
+  
+   </ul>
+  </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+  </div><!--/.navbar -->
 
 <div id="header">
-<h1 class="title">Using <code>RTCGA</code> package to download clinical data that are included in <code>RTCGA.data</code></h1>
+<h1 class="title">Using <code>RTCGA</code> package to download rna-seq data that are included in <code>RTCGA.data</code></h1>
 <h4 class="author"><em>Marcin Kosiński</em></h4>
-<h4 class="date"><em>2015-05-24</em></h4>
+<h4 class="date"><em>2015-05-26</em></h4>
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#rtcga-package">RTCGA package</a></li>
+<li><a href="#how-to-download-rna-seq-data-to-gain-the-sama-datasets-as-in-rtcga.package">How to download rna-seq data to gain the sama datasets as in RTCGA.package?</a><ul>
+<li><a href="#available-cohorts">Available cohorts</a></li>
+<li><a href="#downloading-tarred-files">Downloading tarred files</a></li>
+<li><a href="#untarring-downloaded-files">Untarring downloaded files</a></li>
+<li><a href="#removing-no-longer-needed-tar.gz-files">Removing no longer needed tar.gz files</a></li>
+<li><a href="#reading-downloaded-rna-seq-datasets">Reading downloaded rna-seq datasets</a><ul>
+<li><a href="#paths-to-rna-seq-data">Paths to rna-seq data</a></li>
+<li><a href="#reading-rna-seq-data">Reading rna-seq data</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#saving-rna-seq-data-to-rtcga.data-package">Saving rna-seq data to <code>RTCGA.data</code> package</a></li>
+</ul>
+</div>
 
 <div id="rtcga-package" class="section level1">
 <h1>RTCGA package</h1>
@@ -71,30 +149,41 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <span class="kw">install_github</span>(<span class="st">&quot;MarcinKosinski/RTCGA&quot;</span>)</code></pre>
 <p>Furthermore, <code>RTCGA</code> package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with <code>RTCGA</code>.</p>
 </div>
-<div id="how-to-download-clinical-data-to-gain-the-sama-datasets-as-in-rtcga.package" class="section level1">
-<h1>How to download clinical data to gain the sama datasets as in RTCGA.package?</h1>
+<div id="how-to-download-rna-seq-data-to-gain-the-sama-datasets-as-in-rtcga.package" class="section level1">
+<h1>How to download rna-seq data to gain the sama datasets as in RTCGA.package?</h1>
 <p>There are many available date times of TCGA data releases. To see them all just type:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RTCGA)
 <span class="kw">availableDates</span>()</code></pre>
-<p>Version 0.1 of <code>RTCGA.data</code> package contains clinical datasets from <code>2015-04-02</code>. There were downloaded as follows (which is mainly copied from <a href="http://marcinkosinski.github.io/RTCGA/"><a href="http://marcinkosinski.github.io/RTCGA/" class="uri">http://marcinkosinski.github.io/RTCGA/</a></a>:</p>
+<p>Version 0.1 of <code>RTCGA.data</code> package contains rna-seq datasets from <code>2015-04-02</code>. There were downloaded as follows (which is mainly copied from <a href="http://marcinkosinski.github.io/RTCGA/"><a href="http://marcinkosinski.github.io/RTCGA/" class="uri">http://marcinkosinski.github.io/RTCGA/</a></a>:</p>
 <div id="available-cohorts" class="section level2">
 <h2>Available cohorts</h2>
 <p>All cohort names can be checked using:</p>
 <pre class="sourceCode r"><code class="sourceCode r">(cohorts &lt;-<span class="st"> </span><span class="kw">infoTCGA</span>() %&gt;%<span class="st"> </span>
 <span class="st">   </span><span class="kw">names</span>() %&gt;%<span class="st"> </span>
 <span class="st">   </span><span class="kw">sub</span>(<span class="st">&quot;-counts&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="dt">x=</span>.))</code></pre>
-<p>For all cohorts the following code downloads the clinical data.</p>
+<p>For all cohorts the following code downloads the rna-seq data.</p>
 </div>
 <div id="downloading-tarred-files" class="section level2">
 <h2>Downloading tarred files</h2>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#dir.create( &quot;data2&quot; )</span>
 date &lt;-<span class="st"> &quot;2015-04-02&quot;</span>
-<span class="kw">downloadTCGA</span>( <span class="dt">cancerTypes =</span> cohorts, <span class="dt">destDir =</span> <span class="st">&quot;data2/&quot;</span>, <span class="dt">date =</span> date )</code></pre>
+<span class="kw">sapply</span>( cohorts, function(element){
+<span class="kw">tryCatch</span>({
+<span class="kw">downloadTCGA</span>( <span class="dt">cancerTypes =</span> element, 
+              <span class="dt">dataSet =</span> <span class="st">&quot;rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level&quot;</span>,
+              <span class="dt">destDir =</span> <span class="st">&quot;data2/&quot;</span>, 
+              <span class="dt">date =</span> date )},
+<span class="dt">error =</span> function(cond){
+   <span class="kw">cat</span>(<span class="st">&quot;Error: Maybe there weren't rnaseq data for &quot;</span>, element, <span class="st">&quot; cancer.</span><span class="ch">\n</span><span class="st">&quot;</span>)
+}
+)
+})</code></pre>
 </div>
 <div id="untarring-downloaded-files" class="section level2">
 <h2>Untarring downloaded files</h2>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list.files</span>( <span class="st">&quot;data2/&quot;</span>) %&gt;%<span class="st"> </span>
 <span class="st">   </span><span class="kw">paste0</span>( <span class="st">&quot;data2/&quot;</span>, .) %&gt;%
+<span class="st">   </span><span class="kw">grep</span>( <span class="st">&quot;tar.gz&quot;</span>, <span class="dt">x =</span> ., <span class="dt">value=</span><span class="ot">TRUE</span>) %&gt;%
 <span class="st">   </span><span class="kw">sapply</span>( untar, <span class="dt">exdir =</span> <span class="st">&quot;data2/&quot;</span> )</code></pre>
 </div>
 <div id="removing-no-longer-needed-tar.gz-files" class="section level2">
@@ -105,53 +194,48 @@ date &lt;-<span class="st"> &quot;2015-04-02&quot;</span>
 <span class="st">   </span><span class="kw">grep</span>( <span class="dt">pattern =</span> <span class="st">&quot;tar.gz&quot;</span>, <span class="dt">x =</span> ., <span class="dt">value =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">   </span><span class="kw">sapply</span>( file.remove )</code></pre>
 </div>
-<div id="reading-downloaded-clinical-dataset" class="section level2">
-<h2>Reading downloaded clinical dataset</h2>
-<div id="paths-to-clinical-data" class="section level3">
-<h3>Paths to clinical data</h3>
-<p>Below is the code that automatically gives the path to <code>*.clinical.merged.txt</code> files for all cohorts types downloaded to <code>data2</code> folder.</p>
+<div id="reading-downloaded-rna-seq-datasets" class="section level2">
+<h2>Reading downloaded rna-seq datasets</h2>
+<div id="paths-to-rna-seq-data" class="section level3">
+<h3>Paths to rna-seq data</h3>
+<p>Below is the code that automatically gives the path to <code>*rnaseqv2*</code> files for all cohorts types downloaded to <code>data2</code> folder.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sapply</span>( cohorts, function( element ){
-   folder &lt;-<span class="st"> </span><span class="kw">grep</span>( <span class="kw">paste0</span>( <span class="st">&quot;(_&quot;</span>,element,<span class="st">&quot;</span><span class="ch">\\</span><span class="st">.&quot;</span>, <span class="st">&quot;|&quot;</span>,<span class="st">&quot;_&quot;</span>,element,<span class="st">&quot;-FFPE)&quot;</span>, <span class="st">&quot;.*Clinical&quot;</span>), <span class="kw">list.files</span>(<span class="st">&quot;data2/&quot;</span>),<span class="dt">value =</span> <span class="ot">TRUE</span>)
-   path &lt;-<span class="st"> </span><span class="kw">paste0</span>( <span class="st">&quot;data2/&quot;</span>, folder, <span class="st">&quot;/&quot;</span>, element, <span class="st">&quot;.clin.merged.txt&quot;</span>)
-   <span class="kw">assign</span>( <span class="dt">value =</span> path, <span class="dt">x =</span> <span class="kw">paste0</span>(element, <span class="st">&quot;.clin.path&quot;</span>), <span class="dt">envir =</span> .GlobalEnv)
+   folder &lt;-<span class="st"> </span><span class="kw">grep</span>( <span class="kw">paste0</span>( <span class="st">&quot;(_&quot;</span>,element,<span class="st">&quot;</span><span class="ch">\\</span><span class="st">.&quot;</span>, <span class="st">&quot;|&quot;</span>,<span class="st">&quot;_&quot;</span>,element,<span class="st">&quot;-FFPE)&quot;</span>, <span class="st">&quot;.*rnaseqv2&quot;</span>), <span class="kw">list.files</span>(<span class="st">&quot;data2/&quot;</span>),<span class="dt">value =</span> <span class="ot">TRUE</span>)
+   file &lt;-<span class="st"> </span><span class="kw">grep</span>( <span class="kw">paste0</span>(element, <span class="st">&quot;.*rnaseqv2&quot;</span>), <span class="kw">list.files</span>( <span class="kw">paste0</span>( <span class="st">&quot;data2/&quot;</span>,folder ) ),
+                 <span class="dt">value =</span> <span class="ot">TRUE</span>)
+   path &lt;-<span class="st"> </span><span class="kw">paste0</span>( <span class="st">&quot;data2/&quot;</span>, folder, <span class="st">&quot;/&quot;</span>, file )
+   <span class="kw">assign</span>( <span class="dt">value =</span> path, <span class="dt">x =</span> <span class="kw">paste0</span>(element, <span class="st">&quot;.rnaseq.path&quot;</span>), <span class="dt">envir =</span> .GlobalEnv)
 }) </code></pre>
 </div>
-<div id="reading-clinical-data-using-read.clinical" class="section level3">
-<h3>Reading clinical data using <code>read.clinical</code></h3>
-<p>Because of that clinical data are transposed in downloaded files, there have been prepared special function <code>read.clinical</code> to read and transpose data automatically. Code is below</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sapply</span>( cohorts, function(element){
+<div id="reading-rna-seq-data" class="section level3">
+<h3>Reading rna-seq data</h3>
+<p>Code is below</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(data.table)
+<span class="kw">sapply</span>( cohorts, function(element){
    <span class="kw">tryCatch</span>({
-    <span class="kw">assign</span>( <span class="dt">value =</span> <span class="kw">read.clinical</span>(<span class="kw">get</span>(<span class="kw">paste0</span>(element,<span class="st">&quot;.clin.path&quot;</span>),
-                                      <span class="dt">envir =</span> .GlobalEnv)),
-            <span class="dt">x =</span> <span class="kw">paste0</span>(element, <span class="st">&quot;.clinical&quot;</span>),
+    <span class="kw">assign</span>( <span class="dt">value =</span> <span class="kw">fread</span>(<span class="kw">get</span>(<span class="kw">paste0</span>(element,<span class="st">&quot;.rnaseq.path&quot;</span>),
+                                      <span class="dt">envir =</span> .GlobalEnv)) %&gt;%
+<span class="st">               </span><span class="kw">as.data.frame</span>(),
+            <span class="dt">x =</span> <span class="kw">paste0</span>(element, <span class="st">&quot;.rnaseq&quot;</span>),
             <span class="dt">envir =</span> .GlobalEnv )
     },
    <span class="dt">error=</span>function(cond){
-   <span class="kw">cat</span>(<span class="st">&quot;Error: Maybe there weren't clinical data for &quot;</span>, element, <span class="st">&quot; cancer.</span><span class="ch">\n</span><span class="st">&quot;</span>)
+   <span class="kw">cat</span>(<span class="st">&quot;Error: Maybe there weren't rnaseq data for &quot;</span>, element, <span class="st">&quot; cancer.</span><span class="ch">\n</span><span class="st">&quot;</span>)
 })
 })</code></pre>
-<p>I’m not proud of the code that is inside that function. If anyone could rewrite this function using <code>fread</code> from <code>data.tables</code> package I would be glad to recieve a pull request here: <a href="https://github.com/MarcinKosinski/RTCGA"><a href="https://github.com/MarcinKosinski/RTCGA" class="uri">https://github.com/MarcinKosinski/RTCGA</a></a></p>
-<p>By now it looks like this</p>
-<pre class="sourceCode r"><code class="sourceCode r">read.clinical &lt;-<span class="st"> </span>function(clinicalDir, ...){
-    <span class="kw">assert_that</span>(<span class="kw">is.character</span>(clinicalDir) &amp;<span class="st"> </span><span class="kw">length</span>(clinicalDir) ==<span class="st"> </span><span class="dv">1</span>)
-    comboClinical &lt;-<span class="st"> </span><span class="kw">read.delim</span>(clinicalDir)
-    colNames &lt;-<span class="st"> </span>comboClinical[, <span class="dv">1</span>]
-    comboClinical &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(comboClinical[, -<span class="dv">1</span>]), ...)
-    <span class="kw">names</span>(comboClinical) &lt;-<span class="st"> </span>colNames
-    comboClinical &lt;-<span class="st"> </span><span class="kw">as.data.table</span>(comboClinical)
-    comboClinical &lt;-<span class="st"> </span>comboClinical[, <span class="kw">unique</span>(<span class="kw">names</span>(comboClinical)), with =<span class="st"> </span><span class="ot">FALSE</span>]
-    comboClinical &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(comboClinical, ...)
-    <span class="kw">return</span>(comboClinical)
-}</code></pre>
 </div>
 </div>
 </div>
-<div id="saving-clinical-data-to-rtcga.data-package" class="section level1">
-<h1>Saving clinical data to <code>RTCGA.data</code> package</h1>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>( <span class="st">&quot;clinical&quot;</span>, <span class="kw">ls</span>(), <span class="dt">value =</span> <span class="ot">TRUE</span>) %&gt;%
+<div id="saving-rna-seq-data-to-rtcga.data-package" class="section level1">
+<h1>Saving rna-seq data to <code>RTCGA.data</code> package</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>( <span class="st">&quot;rnaseq&quot;</span>, <span class="kw">ls</span>(), <span class="dt">value =</span> <span class="ot">TRUE</span>)[ -<span class="kw">c</span>(<span class="kw">grep</span>(<span class="st">&quot;path&quot;</span>, <span class="kw">grep</span>( <span class="st">&quot;rnaseq&quot;</span>, <span class="kw">ls</span>(), <span class="dt">value =</span> <span class="ot">TRUE</span>)))] %&gt;%
 <span class="st">   </span><span class="kw">cat</span>( <span class="dt">sep=</span><span class="st">&quot;,&quot;</span> ) <span class="co">#can one to id better? as from use_data documentation:</span>
    <span class="co"># ...    Unquoted names of existing objects to save</span>
-   devtools::<span class="kw">use_data</span>(ACC.clinical,BLCA.clinical,BRCA.clinical,CESC.clinical,CHOL.clinical,COAD.clinical,COADREAD.clinical,DLBC.clinical,ESCA.clinical,FPPP.clinical,GBM.clinical,GBMLGG.clinical,HNSC.clinical,KICH.clinical,KIPAN.clinical,KIRC.clinical,KIRP.clinical,LAML.clinical,LGG.clinical,LIHC.clinical,LUAD.clinical,LUSC.clinical,MESO.clinical,OV.clinical,PAAD.clinical,PCPG.clinical,READ.clinical,SKCM.clinical,STAD.clinical,STES.clinical,TGCT.clinical,THCA.clinical,THYM.clinical,UCEC.clinical,UCS.clinical,UVM.clinical)</code></pre>
+   devtools::<span class="kw">use_data</span>(ACC.rnaseq,BLCA.rnaseq,BRCA.rnaseq,CESC.rnaseq,CHOL.rnaseq,COAD.rnaseq,COADREAD.rnaseq,DLBC.rnaseq,
+                      GBM.rnaseq,GBMLGG.rnaseq,HNSC.rnaseq,KICH.rnaseq,KIPAN.rnaseq,KIRC.rnaseq,KIRP.rnaseq,LAML.rnaseq,
+                      LGG.rnaseq,LIHC.rnaseq,LUAD.rnaseq,LUSC.rnaseq,MESO.rnaseq,OV.rnaseq,PAAD.rnaseq,PCPG.rnaseq,
+                      PRAD.rnaseq,READ.rnaseq,SKCM.rnaseq,TGCT.rnaseq,THCA.rnaseq,THYM.rnaseq,UCEC.rnaseq,UCS.rnaseq,
+                      UVM.rnaseq, <span class="dt">overwrite =</span> <span class="ot">TRUE</span>)</code></pre>
 </div>
 
 
