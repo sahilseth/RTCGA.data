@@ -3,19 +3,17 @@ title: "Using `RTCGA` package to download clinical data that are included in `RT
 author: "Marcin Kosiński"
 date: "`r Sys.Date()`"
 output: 
-   rmarkdown::html_vignette:
+   html_document:
       fig_width: 17
       fig_height: 10
       toc: true
       toc_depth: 3
+      theme: readable
+      highlight: pygments
       keep_md: true
       includes:
          in_header: include/in_header.html
          before_body: include/before_body.html
-vignette: >
-  %\VignetteIndexEntry{Using RTCGA to download clinical data as included in RTCGA.data}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, echo=FALSE}

@@ -3,19 +3,17 @@ title: "R package containing TCGA data"
 author: "Marcin Kosiński"
 date: "`r Sys.Date()`"
 output: 
-   rmarkdown::html_vignette:
+   html_document:
       fig_width: 17
       fig_height: 10
       toc: true
       toc_depth: 3
+      theme: readable
+      highlight: pygments
       keep_md: true
       includes:
          in_header: include/in_header.html
          before_body: include/before_body.html
-vignette: >
-  %\VignetteIndexEntry{home}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, echo=FALSE}
