@@ -32,6 +32,13 @@ To get started, install the latest version of **RTCGA** from Bioconductor:
 ```{Ruby}
 # not there yet
 ```
+
+
+<h4> Authors: </h4>
+
+>
+> Marcin Kosiński, m.p.kosinski@gmail.com
+>
 or use:
 ```{Ruby}
 if (!require(devtools)) {
