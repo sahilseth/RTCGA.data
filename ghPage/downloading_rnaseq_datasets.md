@@ -1,4 +1,4 @@
-# Using `RTCGA` package to download rna-seq data that are included in `RTCGA.data`
+# Using `RTCGA` package to download rna-seq data that are included in `RTCGA.rnaseq` package
 Marcin Kosiński  
 `r Sys.Date()`  
 
@@ -29,7 +29,7 @@ library(RTCGA)
 availableDates()
 ```
 
-Version 0.1 of `RTCGA.data` package contains rna-seq datasets from `2015-04-02`.
+Version 0.1 of `RTCGA.rnaseq` package contains rna-seq datasets from `2015-04-02`.
 There were downloaded as follows (which is mainly copied from [http://marcinkosinski.github.io/RTCGA/](http://marcinkosinski.github.io/RTCGA/):
 
 ## Available cohorts

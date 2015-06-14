@@ -1,5 +1,5 @@
 ---
-title: "R package containing TCGA data"
+title: "The family of R packages containing TCGA data"
 author: "Marcin Kosiński"
 date: "`r Sys.Date()`"
 output: 
@@ -38,27 +38,33 @@ Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to
 
 Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) installed on your computer.
 
-# RTCGA.data package
 
-> Datasets from TCGA project
+# The family of R packages containing TCGA data
 
-<h5> Installation of the `RTCGA.data` package: </h5>
-Install the latest version of **RTCGA.data** from Bioconductor:
-```{r}
-# not there yet
-```
-or use:
+> Datasets from TCGA project.
+
+<h5> Installation of packages from the `RTCGA.data` family : </h5>
+
+
 ```{r}
 if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
-install_github("mi2-warsaw/RTCGA.data")
+install_github("mi2-warsaw/RTCGA.data", subdir = paste0("RTCGA.", c("clinical", "rnaseq")))
 ```
 
 <h5> The list of available datasets: </h5>
 ```{r}
-library(RTCGA.data)
+library(RTCGA.clinical)
+library(RTCGA.rnaseq)
 ?clinical
 ?rnaseq
 ```
+
+
+<h4> Authors: </h4>
+
+>
+> Marcin Kosiński, m.p.kosinski@gmail.com
+>

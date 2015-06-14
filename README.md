@@ -1,4 +1,4 @@
-# Family of R packages containing TCGA data
+# The family of R packages containing TCGA data
 
 Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) installed on your computer.
 

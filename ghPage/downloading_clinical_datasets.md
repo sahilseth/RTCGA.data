@@ -1,4 +1,4 @@
-# Using `RTCGA` package to download clinical data that are included in `RTCGA.data`
+# Using `RTCGA` package to download clinical data that are included in `RTCGA.clinical` package
 Marcin Kosiński  
 `r Sys.Date()`  
 
@@ -29,7 +29,7 @@ library(RTCGA)
 availableDates()
 ```
 
-Version 0.1 of `RTCGA.data` package contains clinical datasets from `2015-04-02`.
+Version 0.1 of `RTCGA.clinical` package contains clinical datasets from `2015-04-02`.
 There were downloaded as follows (which is mainly copied from [http://marcinkosinski.github.io/RTCGA/](http://marcinkosinski.github.io/RTCGA/):
 
 ## Available cohorts
