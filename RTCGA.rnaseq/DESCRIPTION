@@ -1,0 +1,14 @@
+Package: RTCGA.rnaseq
+Type: Package
+Title: Rna-seq datasets from The Cancer Genome Atlas Project
+Version: 0.1
+Date: 2015-06-14
+Author: Marcin Kosinski <m.p.kosinski@gmail.com>
+Maintainer: Marcin Kosinski <m.p.kosinski@gmail.com>
+Description: Package provides rna-seq datasets from The Cancer Genome Atlas Project for all cohorts types from http://gdac.broadinstitute.org/. Rna-seq data format is explained here https://wiki.nci.nih.gov/display/TCGA/RNASeq+Version+2.
+License: GPL-2
+LazyData: TRUE
+Roxygen: list(wrap = TRUE)
+Repository: Bioconductor
+BugReports: https://github.com/mi2-warsaw/RTCGA.data/issues
+Suggests: RTCGA
