@@ -75,7 +75,11 @@ if (!<span class="kw">require</span>(RTCGA.cnv)) {
 <h1>MDM2</h1>
 <p>To get scores for all cancers for selected gene or region one should use the get.region.cnv.score() function.</p>
 <p>For example, MDM2 is located on chromosome 12 positions 69240000-69200000.</p>
-<pre class="sourceCode r"><code class="sourceCode r">MDM2.scores &lt;-<span class="st"> </span><span class="kw">get.region.cnv.score</span>(<span class="dt">chr=</span><span class="st">&quot;12&quot;</span>, <span class="dt">start=</span><span class="dv">69240000</span>, <span class="dt">stop=</span><span class="dv">69200000</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">MDM2.scores &lt;-<span class="st"> </span><span class="kw">get.region.cnv.score</span>(<span class="dt">chr=</span><span class="st">&quot;12&quot;</span>, <span class="dt">start=</span><span class="dv">69240000</span>, <span class="dt">stop=</span><span class="dv">69200000</span>)
+
+<span class="co"># only one per patient</span>
+MDM2.scores$Sample &lt;-<span class="st"> </span><span class="kw">substr</span>(MDM2.scores$Sample, <span class="dv">1</span>, <span class="dv">12</span>)
+MDM2.scores &lt;-<span class="st"> </span>MDM2.scores[!<span class="kw">duplicated</span>(MDM2.scores$Sample),]</code></pre>
 <p>Let’s see where there are more than 3 copies of MDM2</p>
 <pre class="sourceCode r"><code class="sourceCode r">cutoff &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">3</span>)/<span class="kw">log</span>(<span class="dv">2</span>)-<span class="dv">1</span>
 MDM2cuted &lt;-<span class="st"> </span><span class="kw">cut</span>(MDM2.scores$Segment_Mean, <span class="kw">c</span>(<span class="dv">0</span>, cutoff, <span class="ot">Inf</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;&lt;= 3&quot;</span>, <span class="st">&quot;&gt; 3&quot;</span>))</code></pre>
