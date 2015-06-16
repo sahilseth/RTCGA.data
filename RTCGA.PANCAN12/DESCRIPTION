@@ -1,0 +1,14 @@
+Package: RTCGA.PANCAN12
+Type: Package
+Title: PanCan 12 from Genome Cancer Browser
+Version: 0.1
+Date: 2015-06-16
+Author: Przemyslaw Biecek <przemyslaw.biecek@gmail.com>
+Maintainer: Przemyslaw Biecek <przemyslaw.biecek@gmail.com>
+Description: Package provides clinical, expression, cnv and mutation data from Genome Cancer Browser).
+License: GPL-2
+LazyData: TRUE
+Roxygen: list(wrap = TRUE)
+Repository: Bioconductor
+BugReports: https://github.com/mi2-warsaw/RTCGA.PANCAN12/issues
+Suggests: RTCGA
