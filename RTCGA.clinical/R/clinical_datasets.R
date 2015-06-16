@@ -18,11 +18,6 @@
 #' @rdname clinical
 #' @format NULL
 #'
-"BRCA.clinical"
-#' @name clinical
-#' @rdname clinical
-#' @format NULL
-#' 
 "BLCA.clinical"
 #' @name clinical
 #' @rdname clinical

@@ -90,55 +90,73 @@ list.files( "data2/") %>%
 
 ## Merging downloaded mutations datasets
 
-
-here stopped
-
-
-## Reading downloaded rna-seq datasets
-
-### Paths to rna-seq data
-Below is the code that automatically gives the path to `*rnaseqv2*` files for all cohorts types downloaded to `data2` folder.
-
 ```{r}
-sapply( cohorts, function( element ){
-   folder <- grep( paste0( "(_",element,"\\.", "|","_",element,"-FFPE)", ".*rnaseqv2"), list.files("data2/"),value = TRUE)
-   file <- grep( paste0(element, ".*rnaseqv2"), list.files( paste0( "data2/",folder ) ),
-                 value = TRUE)
-   path <- paste0( "data2/", folder, "/", file )
-   assign( value = path, x = paste0(element, ".rnaseq.path"), envir = .GlobalEnv)
-}) 
+list.files( "data2/") %>% 
+   grep( x = ., pattern="gdac", value=TRUE) %>% # there is 1 NA file
+   paste0( "data2/", .) %>%
+   sapply( function(element){
+      tryCatch({
+      list.files(element) %>%
+         paste0( element, "/", .) %>%
+         grep( x =., pattern="TCGA", value = TRUE) -> maf_files 
+      # there are extra manifest.txt files
+      
+      list.files(element) %>%
+         grep( x =., pattern="TCGA", value = TRUE) %>%
+         substr(start = 1, stop = 15) -> barcodes
+      
+      pb <- txtProgressBar(min = 0,
+                           max = length(maf_files),
+                           style = 3)
+      for( i in seq_along(maf_files)){
+
+            maf_data <- read.delim(maf_files[i])
+            n_col <- ncol(maf_data)+1
+            maf_data[,n_col] <- barcodes[i]
+            names(maf_data)[n_col] <- "barcode"
+            write.table(x = maf_data,
+                        sep = "\t",
+                        file= paste0("data2/", 
+                                     paste0( names(which(sapply(cohorts,
+                                            grep,
+                                            element) >0 )),
+                                    ".mutations")
+                                    ),
+                         append=TRUE,
+                         col.names=TRUE,
+                         quote = FALSE,
+                         row.names = FALSE,
+                        )
+         
+         
+         setTxtProgressBar(pb, i)
+      }
+      close(pb)
+   },
+   error=function(cond) cat(element))   
+   }
+   )
 ```
 
-### Reading rna-seq data 
 
-Code is below
-
-
-```{r}
-library(data.table)
-sapply( cohorts, function(element){
-   tryCatch({
-    assign( value = fread(get(paste0(element,".rnaseq.path"),
-                                      envir = .GlobalEnv)) %>%
-               as.data.frame(),
-            x = paste0(element, ".rnaseq"),
-            envir = .GlobalEnv )
-    },
-   error=function(cond){
-   cat("Error: Maybe there weren't rnaseq data for ", element, " cancer.\n")
-})
-})
-```
-
-
-
-# Saving rna-seq data to `RTCGA.data` package
+# Saving mutations data to `RTCGA.mutations` package
 
 
 ```{r}
-grep( "rnaseq", ls(), value = TRUE)[ -c(grep("path", grep( "rnaseq", ls(), value = TRUE)))] %>%
-   cat( sep="," ) #can one to id better? as from use_data documentation:
-   # ...	Unquoted names of existing objects to save
-   devtools::use_data(ACC.rnaseq,BLCA.rnaseq,BRCA.rnaseq,CESC.rnaseq,CHOL.rnaseq,COAD.rnaseq,COADREAD.rnaseq,DLBC.rnaseq,GBM.rnaseq,GBMLGG.rnaseq,HNSC.rnaseq,KICH.rnaseq,KIPAN.rnaseq,KIRC.rnaseq,KIRP.rnaseq,LAML.rnaseq,LGG.rnaseq,LIHC.rnaseq,LUAD.rnaseq,LUSC.rnaseq,MESO.rnaseq,OV.rnaseq,PAAD.rnaseq,PCPG.rnaseq,PRAD.rnaseq,READ.rnaseq,SKCM.rnaseq,TGCT.rnaseq,THCA.rnaseq,THYM.rnaseq,UCEC.rnaseq,UCS.rnaseq,UVM.rnaseq, overwrite = TRUE)
+list.files("data2/") %>%
+   grep( x=., pattern ="mutations", value = TRUE) %>%
+   paste0("data2/", .) %>%
+   sapply( function(element){
+      read.delim(element) -> mutations_file
+      assign( x = substr(element, start=7, stop=100),
+               value = mutations_file,
+              envir = .GlobalEnv )
+
+      save( list= substr(element, start=7, stop=100),
+            file = paste0("RTCGA.mutations/data/",
+                     substr(element, start=7, stop=100),
+                     ".rda"))
+      rm(list = substr(element, start=7, stop=100), envir = .GlobalEnv)
+   })
 ```
 

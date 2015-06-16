@@ -18,11 +18,6 @@
 #' @rdname rnaseq
 #' @format NULL
 #'
-"BRCA.rnaseq"
-#' @name rnaseq
-#' @rdname rnaseq
-#' @format NULL
-#' 
 "BLCA.rnaseq"
 #' @name rnaseq
 #' @rdname rnaseq
