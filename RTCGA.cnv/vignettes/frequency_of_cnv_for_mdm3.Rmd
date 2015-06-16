@@ -1,0 +1,56 @@
+---
+title: "Using `RTCGA` package to estimate a frequency of MDM2 duplications based on CNV data"
+author: "Przemyslaw Biecek"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using RTCGA to estimate ratio of MDM2 duplications}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), cache=TRUE)
+```
+
+# RTCGA.cnv package
+
+You need RTCGA.cnv package to use CNV scores.
+
+```{r}
+if (!require(devtools)) {
+    install.packages("devtools")
+    require(devtools)
+}
+if (!require(RTCGA.cnv)) {
+    install.packages("devtools")
+    install_github("mi2-warsaw/RTCGA.data", subdir = "RTCGA.cnv")
+    require(RTCGA.cnv)
+}
+```
+
+
+# MDM2
+
+To get scores for all cancers for selected gene or region one should use
+the get.region.cnv.score() function.
+
+For example, MDM2 is located on chromosome 12 positions 69240000-69200000.
+
+```{r}
+MDM2.scores <- get.region.cnv.score(chr="12", start=69240000, stop=69200000)
+```
+
+Let's see where there are more than 3 copies of MDM2
+
+```{r}
+cutoff <- log(3)/log(2)-1
+MDM2cuted <- cut(MDM2.scores$Segment_Mean, c(0, cutoff, Inf), labels = c("<= 3", "> 3"))
+```
+
+And now we can calculate number of cases with <= or >3 copies od MDM2 in each cancer type.
+
+```{r}
+table(MDM2.scores$cohort, MDM2cuted)
+```
