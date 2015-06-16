@@ -1,10 +1,10 @@
 ---
-title: "Using `RTCGA` package to download rna-seq data that are included in `RTCGA.rnaseq` package"
+title: "Using `RTCGA` package to download mutations data that are included in `RTCGA.mutations` package"
 author: "Marcin Kosiński"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using RTCGA to download rna-seq data as included in RTCGA.data}
+  %\VignetteIndexEntry{Using RTCGA to download mutations data as included in RTCGA.data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -29,7 +29,7 @@ install_github("MarcinKosinski/RTCGA")
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.
 
-# How to download rna-seq data to gain the sama datasets as in RTCGA.rnaseq package?
+# How to download clinical data to gain the sama datasets as in RTCGA.mutations package?
 
 There are many available date times of TCGA data releases. To see them all just type:
 ```{r}
@@ -37,7 +37,7 @@ library(RTCGA)
 availableDates()
 ```
 
-Version 0.1 of `RTCGA.rnaseq` package contains rna-seq datasets from `2015-04-02`.
+Version 0.1 of `RTCGA.mutations` package contains mutations datasets from `2015-04-02`.
 There were downloaded as follows (which is mainly copied from [http://marcinkosinski.github.io/RTCGA/](http://marcinkosinski.github.io/RTCGA/):
 
 ## Available cohorts
@@ -49,7 +49,7 @@ All cohort names can be checked using:
    sub("-counts", "", x=.))
 ```
 
-For all cohorts the following code downloads the rna-seq data.
+For all cohorts the following code downloads the mutations data.
 
 ## Downloading tarred files
 ```{r}
@@ -58,11 +58,11 @@ date <- "2015-04-02"
 sapply( cohorts, function(element){
 tryCatch({
 downloadTCGA( cancerTypes = element, 
-              dataSet = "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level",
+              dataSet = "Mutation_Packager_Calls.Level",
               destDir = "data2/", 
               date = date )},
 error = function(cond){
-   cat("Error: Maybe there weren't rnaseq data for ", element, " cancer.\n")
+   cat("Error: Maybe there weren't mutations data for ", element, " cancer.\n")
 }
 )
 })
@@ -86,6 +86,13 @@ list.files( "data2/") %>%
    sapply( file.remove )
 
 ```
+
+
+## Merging downloaded mutations datasets
+
+
+here stopped
+
 
 ## Reading downloaded rna-seq datasets
 
