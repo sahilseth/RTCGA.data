@@ -40,6 +40,10 @@ For example, MDM2 is located on chromosome 12 positions 69240000-69200000.
 
 ```{r}
 MDM2.scores <- get.region.cnv.score(chr="12", start=69240000, stop=69200000)
+
+# only one per patient
+MDM2.scores$Sample <- substr(MDM2.scores$Sample, 1, 12)
+MDM2.scores <- MDM2.scores[!duplicated(MDM2.scores$Sample),]
 ```
 
 Let's see where there are more than 3 copies of MDM2
