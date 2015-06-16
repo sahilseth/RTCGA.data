@@ -5,7 +5,7 @@ Version: 0.1
 Date: 2015-06-16
 Author: Przemyslaw Biecek <przemyslaw.biecek@gmail.com>
 Maintainer: Przemyslaw Biecek <przemyslaw.biecek@gmail.com>
-Description: Package provides cnv (based on Merge snp) datasets from The Cancer Genome Atlas Project for all cohorts types from http://gdac.broadinstitute.org/. Data format is explained here https://wiki.nci.nih.gov/display/TCGA/Retrieving+Data+Using+the+Data+Matrix
+Description: Package provides cnv (based on Merge snp) datasets from The Cancer Genome Atlas Project for all cohorts types from http://gdac.broadinstitute.org/. Data format is explained here https://wiki.nci.nih.gov/display/TCGA/Retrieving+Data+Using+the+Data+Matrix. Data from 2015-02-04 snapshot.
 License: GPL-2
 LazyData: TRUE
 Roxygen: list(wrap = TRUE)
