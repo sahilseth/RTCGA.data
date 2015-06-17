@@ -11,14 +11,12 @@ vignette: >
 
 ```{r, echo=FALSE}
 library(knitr)
-opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), cache=TRUE)
+opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), cache=TRUE, fig.width=10, fig.height=10)
 ```
 
 # RTCGA.cnv package
 
 You need RTCGA.PANCAN12 package to use PANCAN12 data from Cancer Genome Browser.
-
-"/Users/pbiecek/_TCGA_wszystkie_raki_/data/genome_cancer"
 
 ```{r}
 require(devtools)
@@ -30,8 +28,8 @@ if (!require(RTCGA.PANCAN12)) {
 
 # Expression
 
-Expression data is divided int to datasets, since it's too big to fit GitHub limits.
-So first you need to bind both data sets into one.
+Expression data is divided and stored in two datasets, because it was too big to fit GitHub limits.
+So first you need to do is to bind both data sets into one.
 
 ```{r}
 expression.cb <- rbind(expression.cb1, expression.cb2)
@@ -78,16 +76,17 @@ colnames(dfTMC) = c("names", "TP53", "MDM2", "cohort","TIME_TO_EVENT","EVENT","P
 dfTMC$TP53 <- factor(dfTMC$TP53)
 
 # only primary tumor
-dfTMC <- dfTMC[grep(dfTMC$names, pattern="01$"),]
+# (removed because of Leukemia)
+# dfTMC <- dfTMC[grep(dfTMC$names, pattern="01$"),]
 ```
 
 # MDM2 and TP53
 
-Firs't let's see the MDM2 expression along cancers 
+First let's see the MDM2 expression along cancers.
 
 ```{r}
 library(ggplot2)
-
+quantile <- stats::quantile
 ggplot(dfTMC, aes(x=cohort, y=MDM2)) + geom_boxplot() + theme_bw() + coord_flip() + ylab("")
 
 ```
@@ -106,7 +105,7 @@ sort(table(dfTMC$cohort))
 
 # Survival in different cancer types given MDM2 and TP53
 
-Let's dychotomize MDM2 into two groups with the cutoff =0 (almost median).
+Let's dichotomize MDM2 into two groups with the cutoff =0 (almost median).
 
 ```{r}
 dfTMC$MDM2b <- cut(dfTMC$MDM2, c(-100,0,100), labels=c("low", "high"))
@@ -126,7 +125,18 @@ dfTMC %>%
 
 For four cancers with largest number of cases let's see Kaplan Meier curves divided into MDM2/TP53 groups.
 
-```{r, fig.width=12, fig.height=10}
+Comments:
+
+For Breast there is a very nice relation between high MDM2/mutated TP53 and survival. Outcomes for first 5 years are much worse.
+
+For Kidney mutations in TP53 are uncommon, but both groups have bad prognosis.
+
+For Head and Neck mutations in TP53 have bad prognosis and id MDM2 is high the prognosis is even worse.
+
+For Endomeroid the interesting group is very small, for Lung there is no clear pattern. Remaining cancers are very small.
+
+
+```{r}
 library(survey)
 library(scales)
 library(survMisc)
@@ -134,7 +144,7 @@ library(survMisc)
 # cancer = "TCGA Breast Cancer"
 cancers <- names(sort(-table(dfTMC$cohort)))
 
-for (cancer in cancers[1:12]) {
+for (cancer in cancers[1:11]) {
   survp <- survfit(Surv(TIME_TO_EVENT/356,EVENT)~TP53+MDM2b, data=dfTMC, subset=cohort == cancer)
   pl <- autoplot(survp, title = "")$plot + theme_bw() + scale_x_continuous(limits=c(0,10), breaks=0:10) + ggtitle(cancer) + scale_y_continuous(labels = percent, limits=c(0,1))
   cat(cancer,"\n")
@@ -142,3 +152,4 @@ for (cancer in cancers[1:12]) {
 }
 
 ```
+
