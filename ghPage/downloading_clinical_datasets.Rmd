@@ -36,7 +36,7 @@ install_github("MarcinKosinski/RTCGA")
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.
 
-# How to download clinical data to gain the sama datasets as in RTCGA.package?
+# How to download clinical data to gain the sama datasets as in RTCGA.clinical package?
 
 There are many available date times of TCGA data releases. To see them all just type:
 ```{r}
@@ -141,11 +141,6 @@ read.clinical <- function(clinicalDir, ...){
 grep( "clinical", ls(), value = TRUE) %>%
    cat( sep="," ) #can one to id better? as from use_data documentation:
    # ...	Unquoted names of existing objects to save
-   devtools::use_data(ACC.clinical,BLCA.clinical,BRCA.clinical,CESC.clinical,CHOL.clinical,COAD.clinical,COADREAD.clinical,
-                      DLBC.clinical,ESCA.clinical,FPPP.clinical,GBM.clinical,GBMLGG.clinical,HNSC.clinical,KICH.clinical,
-                      KIPAN.clinical,KIRC.clinical,KIRP.clinical,LAML.clinical,LGG.clinical,LIHC.clinical,LUAD.clinical,
-                      LUSC.clinical,MESO.clinical,OV.clinical,PAAD.clinical,PCPG.clinical,READ.clinical,SKCM.clinical,
-                      STAD.clinical,STES.clinical,TGCT.clinical,THCA.clinical,THYM.clinical,UCEC.clinical,UCS.clinical,
-                      UVM.clinical)
+   devtools::use_data(ACC.clinical,BLCA.clinical,BRCA.clinical,CESC.clinical,CHOL.clinical,COAD.clinical,COADREAD.clinical,DLBC.clinical,ESCA.clinical,FPPP.clinical,GBM.clinical,GBMLGG.clinical,HNSC.clinical,KICH.clinical,KIPAN.clinical,KIRC.clinical,KIRP.clinical,LAML.clinical,LGG.clinical,LIHC.clinical,LUAD.clinical,LUSC.clinical,MESO.clinical,OV.clinical,PAAD.clinical,PCPG.clinical,READ.clinical,SKCM.clinical,STAD.clinical,STES.clinical,TGCT.clinical,THCA.clinical,THYM.clinical,UCEC.clinical,UCS.clinical,UVM.clinical)
 ```
 

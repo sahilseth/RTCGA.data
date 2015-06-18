@@ -10,15 +10,23 @@ if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
-install_github("mi2-warsaw/RTCGA.data", subdir = paste0("RTCGA.", c("clinical", "rnaseq")))
+install_github("mi2-warsaw/RTCGA.data", 
+               subdir = paste0("RTCGA.", 
+                              c("clinical",
+                                 "rnaseq",
+                                 "mutations")
+                                 )
+               )
 ```
 
 <h5> The list of available datasets: </h5>
 ```{Ruby}
 library(RTCGA.clinical)
 library(RTCGA.rnaseq)
+library(RTCGA.mutations)
 ?clinical
 ?rnaseq
+?mutations
 ```
 
 # Packages from the `RTCGA.data`-family are based on the `RTCGA` package

@@ -20,7 +20,7 @@ install_github("MarcinKosinski/RTCGA")
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.
 
-# How to download rna-seq data to gain the sama datasets as in RTCGA.package?
+# How to download rna-seq data to gain the sama datasets as in RTCGA.rnaseq package?
 
 There are many available date times of TCGA data releases. To see them all just type:
 
@@ -130,10 +130,6 @@ sapply( cohorts, function(element){
 grep( "rnaseq", ls(), value = TRUE)[ -c(grep("path", grep( "rnaseq", ls(), value = TRUE)))] %>%
    cat( sep="," ) #can one to id better? as from use_data documentation:
    # ...	Unquoted names of existing objects to save
-   devtools::use_data(ACC.rnaseq,BLCA.rnaseq,BRCA.rnaseq,CESC.rnaseq,CHOL.rnaseq,COAD.rnaseq,COADREAD.rnaseq,DLBC.rnaseq,
-                      GBM.rnaseq,GBMLGG.rnaseq,HNSC.rnaseq,KICH.rnaseq,KIPAN.rnaseq,KIRC.rnaseq,KIRP.rnaseq,LAML.rnaseq,
-                      LGG.rnaseq,LIHC.rnaseq,LUAD.rnaseq,LUSC.rnaseq,MESO.rnaseq,OV.rnaseq,PAAD.rnaseq,PCPG.rnaseq,
-                      PRAD.rnaseq,READ.rnaseq,SKCM.rnaseq,TGCT.rnaseq,THCA.rnaseq,THYM.rnaseq,UCEC.rnaseq,UCS.rnaseq,
-                      UVM.rnaseq, overwrite = TRUE)
+   devtools::use_data(ACC.rnaseq,BLCA.rnaseq,BRCA.rnaseq,CESC.rnaseq,CHOL.rnaseq,COAD.rnaseq,COADREAD.rnaseq,DLBC.rnaseq,GBM.rnaseq,GBMLGG.rnaseq,HNSC.rnaseq,KICH.rnaseq,KIPAN.rnaseq,KIRC.rnaseq,KIRP.rnaseq,LAML.rnaseq,LGG.rnaseq,LIHC.rnaseq,LUAD.rnaseq,LUSC.rnaseq,MESO.rnaseq,OV.rnaseq,PAAD.rnaseq,PCPG.rnaseq,PRAD.rnaseq,READ.rnaseq,SKCM.rnaseq,TGCT.rnaseq,THCA.rnaseq,THYM.rnaseq,UCEC.rnaseq,UCS.rnaseq,UVM.rnaseq, overwrite = TRUE)
 ```
 
