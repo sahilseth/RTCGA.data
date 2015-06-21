@@ -10,7 +10,7 @@
 
 <meta name="author" content="Marcin Kosinski" />
 
-<meta name="date" content="2015-06-14" />
+<meta name="date" content="2015-06-18" />
 
 <title>Using RTCGA package to download clinical data that are included in RTCGA.clinical package</title>
 
@@ -123,9 +123,10 @@ img {
    <li class="dropdown">
    <a href="authoring" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Getting data<span class="caret"></span></a>
    <ul class="dropdown-menu" role="menu">
-      <li class="dropdown-header">Checked for ver 1.0</li>
-  <li><a href="downloading_clinical_datasets.html">Clinical</a></li>
+      <li class="dropdown-header">Checked for ver 0.1</li>
+  <li><a href="downloading_clinical_datasets.html">clinical</a></li>
    <li><a href="downloading_rnaseq_datasets.html">rnaseq</a></li>
+   <li><a href="downloading_mutations_datasets.html">mutations</a></li>
   </ul>
   
   
@@ -137,13 +138,13 @@ img {
 <div id="header">
 <h1 class="title">Using <code>RTCGA</code> package to download clinical data that are included in <code>RTCGA.clinical</code> package</h1>
 <h4 class="author"><em>Marcin Kosinski</em></h4>
-<h4 class="date"><em>2015-06-14</em></h4>
+<h4 class="date"><em>2015-06-18</em></h4>
 </div>
 
 <div id="TOC">
 <ul>
 <li><a href="#rtcga-package">RTCGA package</a></li>
-<li><a href="#how-to-download-clinical-data-to-gain-the-sama-datasets-as-in-rtcga.package">How to download clinical data to gain the sama datasets as in RTCGA.package?</a><ul>
+<li><a href="#how-to-download-clinical-data-to-gain-the-sama-datasets-as-in-rtcga.clinical-package">How to download clinical data to gain the sama datasets as in RTCGA.clinical package?</a><ul>
 <li><a href="#available-cohorts">Available cohorts</a></li>
 <li><a href="#downloading-tarred-files">Downloading tarred files</a></li>
 <li><a href="#untarring-downloaded-files">Untarring downloaded files</a></li>
@@ -170,8 +171,8 @@ img {
 <span class="kw">install_github</span>(<span class="st">&quot;MarcinKosinski/RTCGA&quot;</span>)</code></pre>
 <p>Furthermore, <code>RTCGA</code> package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with <code>RTCGA</code>.</p>
 </div>
-<div id="how-to-download-clinical-data-to-gain-the-sama-datasets-as-in-rtcga.package" class="section level1">
-<h1>How to download clinical data to gain the sama datasets as in RTCGA.package?</h1>
+<div id="how-to-download-clinical-data-to-gain-the-sama-datasets-as-in-rtcga.clinical-package" class="section level1">
+<h1>How to download clinical data to gain the sama datasets as in RTCGA.clinical package?</h1>
 <p>There are many available date times of TCGA data releases. To see them all just type:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RTCGA)
 <span class="kw">availableDates</span>()</code></pre>
@@ -250,12 +251,7 @@ date &lt;-<span class="st"> &quot;2015-04-02&quot;</span>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>( <span class="st">&quot;clinical&quot;</span>, <span class="kw">ls</span>(), <span class="dt">value =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">   </span><span class="kw">cat</span>( <span class="dt">sep=</span><span class="st">&quot;,&quot;</span> ) <span class="co">#can one to id better? as from use_data documentation:</span>
    <span class="co"># ...    Unquoted names of existing objects to save</span>
-   devtools::<span class="kw">use_data</span>(ACC.clinical,BLCA.clinical,BRCA.clinical,CESC.clinical,CHOL.clinical,COAD.clinical,COADREAD.clinical,
-                      DLBC.clinical,ESCA.clinical,FPPP.clinical,GBM.clinical,GBMLGG.clinical,HNSC.clinical,KICH.clinical,
-                      KIPAN.clinical,KIRC.clinical,KIRP.clinical,LAML.clinical,LGG.clinical,LIHC.clinical,LUAD.clinical,
-                      LUSC.clinical,MESO.clinical,OV.clinical,PAAD.clinical,PCPG.clinical,READ.clinical,SKCM.clinical,
-                      STAD.clinical,STES.clinical,TGCT.clinical,THCA.clinical,THYM.clinical,UCEC.clinical,UCS.clinical,
-                      UVM.clinical)</code></pre>
+   devtools::<span class="kw">use_data</span>(ACC.clinical,BLCA.clinical,BRCA.clinical,CESC.clinical,CHOL.clinical,COAD.clinical,COADREAD.clinical,DLBC.clinical,ESCA.clinical,FPPP.clinical,GBM.clinical,GBMLGG.clinical,HNSC.clinical,KICH.clinical,KIPAN.clinical,KIRC.clinical,KIRP.clinical,LAML.clinical,LGG.clinical,LIHC.clinical,LUAD.clinical,LUSC.clinical,MESO.clinical,OV.clinical,PAAD.clinical,PCPG.clinical,READ.clinical,SKCM.clinical,STAD.clinical,STES.clinical,TGCT.clinical,THCA.clinical,THYM.clinical,UCEC.clinical,UCS.clinical,UVM.clinical)</code></pre>
 </div>
 
 
