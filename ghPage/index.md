@@ -40,7 +40,9 @@ install_github("mi2-warsaw/RTCGA.data",
                subdir = paste0("RTCGA.", 
                               c("clinical",
                                  "rnaseq",
-                                 "mutations")
+                                 "mutations",
+                                 "PANCAN12",
+                                 "cnv")
                                  )
                )
 ```
@@ -51,14 +53,19 @@ install_github("mi2-warsaw/RTCGA.data",
 library(RTCGA.clinical)
 library(RTCGA.rnaseq)
 library(RTCGA.mutations)
+library(RTCGA.PANCAN12)
+library(RTCGA.cnv)
 ?clinical
 ?rnaseq
 ?mutations
+?pancan12
+?cnv
 ```
 
 
 <h4> Authors: </h4>
 
 >
-> Marcin Kosinski, m.p.kosinski@gmail.com
+> Marcin Kosiński, m.p.kosinski@gmail.com
+> Przemysław Biecek, przemyslaw.biecek@gmail.com
 >

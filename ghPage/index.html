@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Marcin Kosinski" />
+<meta name="author" content="Marcin Kosiński" />
 
 <meta name="date" content="2015-06-21" />
 
@@ -127,6 +127,7 @@ img {
   <li><a href="downloading_clinical_datasets.html">clinical</a></li>
    <li><a href="downloading_rnaseq_datasets.html">rnaseq</a></li>
    <li><a href="downloading_mutations_datasets.html">mutations</a></li>
+   <li><a href="pancan12.html">pancan12</a></li>
   </ul>
   
   
@@ -137,7 +138,7 @@ img {
 
 <div id="header">
 <h1 class="title">The family of R packages containing TCGA data</h1>
-<h4 class="author"><em>Marcin Kosinski</em></h4>
+<h4 class="author"><em>Marcin Kosiński</em></h4>
 <h4 class="date"><em>2015-06-21</em></h4>
 </div>
 
@@ -178,7 +179,9 @@ Installation of packages from the <code>RTCGA.data</code> family :
                <span class="dt">subdir =</span> <span class="kw">paste0</span>(<span class="st">&quot;RTCGA.&quot;</span>, 
                               <span class="kw">c</span>(<span class="st">&quot;clinical&quot;</span>,
                                  <span class="st">&quot;rnaseq&quot;</span>,
-                                 <span class="st">&quot;mutations&quot;</span>)
+                                 <span class="st">&quot;mutations&quot;</span>,
+                                 <span class="st">&quot;PANCAN12&quot;</span>,
+                                 <span class="st">&quot;cnv&quot;</span>)
                                  )
                )</code></pre>
 <h5>
@@ -187,14 +190,18 @@ The list of available datasets:
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RTCGA.clinical)
 <span class="kw">library</span>(RTCGA.rnaseq)
 <span class="kw">library</span>(RTCGA.mutations)
+<span class="kw">library</span>(RTCGA.PANCAN12)
+<span class="kw">library</span>(RTCGA.cnv)
 ?clinical
 ?rnaseq
-?mutations</code></pre>
+?mutations
+?pancan12
+?cnv</code></pre>
 <h4>
 Authors:
 </h4>
 <blockquote>
-<p>Marcin Kosinski, <a href="mailto:m.p.kosinski@gmail.com">m.p.kosinski@gmail.com</a></p>
+<p>Marcin Kosiński, <a href="mailto:m.p.kosinski@gmail.com">m.p.kosinski@gmail.com</a> Przemysław Biecek, <a href="mailto:przemyslaw.biecek@gmail.com">przemyslaw.biecek@gmail.com</a></p>
 </blockquote>
 </div>
 
