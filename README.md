@@ -14,7 +14,9 @@ install_github("mi2-warsaw/RTCGA.data",
                subdir = paste0("RTCGA.", 
                               c("clinical",
                                  "rnaseq",
-                                 "mutations")
+                                 "mutations",
+                                 "cnv",
+                                 "PANCAN12")
                                  )
                )
 ```
@@ -24,9 +26,13 @@ install_github("mi2-warsaw/RTCGA.data",
 library(RTCGA.clinical)
 library(RTCGA.rnaseq)
 library(RTCGA.mutations)
+library(RTCGA.PANCAN12)
+library(RTCGA.cnv)
 ?clinical
 ?rnaseq
 ?mutations
+?pancan12
+?cnv
 ```
 
 # Packages from the `RTCGA.data`-family are based on the `RTCGA` package
@@ -47,4 +53,5 @@ install_github("MarcinKosinski/RTCGA")
 
 >
 > Marcin Kosiński, m.p.kosinski@gmail.com
+> Przemysław Biecek, przemyslaw.biecek@gmail.com
 >
