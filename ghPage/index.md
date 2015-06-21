@@ -36,7 +36,13 @@ if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
-install_github("mi2-warsaw/RTCGA.data", subdir = paste0("RTCGA.", c("clinical", "rnaseq")))
+install_github("mi2-warsaw/RTCGA.data", 
+               subdir = paste0("RTCGA.", 
+                              c("clinical",
+                                 "rnaseq",
+                                 "mutations")
+                                 )
+               )
 ```
 
 <h5> The list of available datasets: </h5>
@@ -44,8 +50,10 @@ install_github("mi2-warsaw/RTCGA.data", subdir = paste0("RTCGA.", c("clinical", 
 ```r
 library(RTCGA.clinical)
 library(RTCGA.rnaseq)
+library(RTCGA.mutations)
 ?clinical
 ?rnaseq
+?mutations
 ```
 
 
