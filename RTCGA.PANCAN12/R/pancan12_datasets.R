@@ -22,7 +22,11 @@
 #' @name pancan12
 #' @rdname pancan12
 #' @format NULL
-"expression.cb"
+"expression.cb1"
+#' @name pancan12
+#' @rdname pancan12
+#' @format NULL
+"expression.cb2"
 #' @name pancan12
 #' @rdname pancan12
 #' @format NULL
