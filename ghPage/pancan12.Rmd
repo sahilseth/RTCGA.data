@@ -1,0 +1,155 @@
+---
+title: "Using `RTCGA.PANCAN12` package to compare time to death for selected tumor types"
+author: "Przemyslaw Biecek"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using RTCGA.PANCAN12 to compare time to death}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), cache=TRUE, fig.width=10, fig.height=10)
+```
+
+# RTCGA.cnv package
+
+You need RTCGA.PANCAN12 package to use PANCAN12 data from Cancer Genome Browser.
+
+```{r}
+require(devtools)
+if (!require(RTCGA.PANCAN12)) {
+    install_github("mi2-warsaw/RTCGA.data", subdir = "RTCGA.PANCAN12")
+    require(RTCGA.PANCAN12)
+}
+```
+
+# Expression
+
+Expression data is divided and stored in two datasets, because it was too big to fit GitHub limits.
+So first you need to do is to bind both data sets into one.
+
+```{r}
+expression.cb <- rbind(expression.cb1, expression.cb2)
+```
+
+Now, let's see where is expression for MDM2 and let's create a dataset with single column single  - MDM2 expression.
+
+```{r}
+grep(expression.cb[,1], pattern="MDM2")
+
+MDM2 <- expression.cb[8467,-1]
+MDM2v <- t(MDM2)
+```
+
+# Mutations
+
+Mutations are stored in mutation.cb and they are coded 0/1.
+Let's gather all mutations for TP53 and then let's create a data frame with single column - only for TP53?
+
+```{r}
+grep(mutation.cb[,1], pattern="TP53$", value = FALSE)
+
+TP53 <- mutation.cb[18475,-1]
+TP53v <- t(TP53)
+```
+
+# Merging
+
+From clinical data we are going to extract following variables:
+- X_cohort (cancer type)
+- X_EVENT (0/1)
+- X_TIME_TO_EVENT (in days)
+- X_PANCAN_UNC_RNAseq_PANCAN_K16 (cancer's subtypes)
+
+And then we merge clinical, expression and mutation datasets.
+Not that it requires some data cleaning (in clinical data _ is used as a separator while in expression and mutation it's .).
+
+```{r}
+dfC <- data.frame(names=gsub(clinical.cb[,1], pattern="-", replacement="."), clinical.cb[,c("X_cohort","X_TIME_TO_EVENT","X_EVENT","X_PANCAN_UNC_RNAseq_PANCAN_K16")])
+dfT <- data.frame(names=rownames(TP53v), vT = TP53v)
+dfM <- data.frame(names=rownames(MDM2v), vM = MDM2v)
+dfTMC <- merge(merge(dfT, dfM), dfC)
+colnames(dfTMC) = c("names", "TP53", "MDM2", "cohort","TIME_TO_EVENT","EVENT","PANCAN_UNC_RNAseq_PANCAN_K16")
+dfTMC$TP53 <- factor(dfTMC$TP53)
+
+# only primary tumor
+# (removed because of Leukemia)
+# dfTMC <- dfTMC[grep(dfTMC$names, pattern="01$"),]
+```
+
+# MDM2 and TP53
+
+First let's see the MDM2 expression along cancers.
+
+```{r}
+library(ggplot2)
+quantile <- stats::quantile
+ggplot(dfTMC, aes(x=cohort, y=MDM2)) + geom_boxplot() + theme_bw() + coord_flip() + ylab("")
+
+```
+
+And let's see the fraction of TP53 in cancers
+
+```{r}
+ggplot(dfTMC, aes(x=cohort, fill=TP53)) + geom_bar() + theme_bw() + coord_flip() + ylab("")
+```
+
+And how many cases for particular cancer types?
+
+```{r}
+sort(table(dfTMC$cohort))
+```
+
+# Survival in different cancer types given MDM2 and TP53
+
+Let's dichotomize MDM2 into two groups with the cutoff =0 (almost median).
+
+```{r}
+dfTMC$MDM2b <- cut(dfTMC$MDM2, c(-100,0,100), labels=c("low", "high"))
+```
+
+Number of cases
+
+```{r}
+library(dplyr)
+library(tidyr)
+dfTMC %>% 
+  group_by(MDM2b, TP53, cohort) %>%
+  summarize(count=n()) %>%
+  unite(TP53_MDM2, TP53, MDM2b) %>%
+  spread(TP53_MDM2, count, fill = 0)
+```
+
+For four cancers with largest number of cases let's see Kaplan Meier curves divided into MDM2/TP53 groups.
+
+Comments:
+
+For Breast there is a very nice relation between high MDM2/mutated TP53 and survival. Outcomes for first 5 years are much worse.
+
+For Kidney mutations in TP53 are uncommon, but both groups have bad prognosis.
+
+For Head and Neck mutations in TP53 have bad prognosis and id MDM2 is high the prognosis is even worse.
+
+For Endomeroid the interesting group is very small, for Lung there is no clear pattern. Remaining cancers are very small.
+
+
+```{r}
+library(survey)
+library(scales)
+library(survMisc)
+
+# cancer = "TCGA Breast Cancer"
+cancers <- names(sort(-table(dfTMC$cohort)))
+
+for (cancer in cancers[1:11]) {
+  survp <- survfit(Surv(TIME_TO_EVENT/356,EVENT)~TP53+MDM2b, data=dfTMC, subset=cohort == cancer)
+  pl <- autoplot(survp, title = "")$plot + theme_bw() + scale_x_continuous(limits=c(0,10), breaks=0:10) + ggtitle(cancer) + scale_y_continuous(labels = percent, limits=c(0,1))
+  cat(cancer,"\n")
+  plot(pl)
+}
+
+```
+
