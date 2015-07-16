@@ -8,7 +8,7 @@ author:
     - Koszykowa 75, 00-662 Warsaw, Poland
     email:  M.P.Kosinski@gmail.com
   - name: Przemysław Biecek
-    affiliation: Warsaw University
+    affiliation: University of Warsaw
     address:
     - line 1
     - line 2
