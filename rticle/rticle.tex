@@ -18,6 +18,12 @@ and subtypes of cancer will support advances in developing more
 effective ways to diagnose, treat and prevent cancer.
 }
 
+\begin{Schunk}
+\begin{Soutput}
+#> Warning: package 'knitr' was built under R version 3.2.1
+\end{Soutput}
+\end{Schunk}
+
 \subsection{Motivation}\label{motivation}
 
 The Cancer Genome Atlas (TCGA) Data Portal provides a platform for
@@ -58,6 +64,11 @@ The main disadvantages of such data download methodology are:
   potential researchers may be a impassable barrier. Just think about
   BRCA cohort (breast cancer) with more that 1000 various patients and
   more than 1200 files with patients' genes mutations information.
+\item
+  Data governance for many datasets for various cohorts saved in
+  different folders with strange (default after untarring) names may be
+  extremely exhausting and uncomfortable for researchers that are not
+  very skilled in data management or data processing.
 \end{itemize}
 
 \subsection{RTCGA.data family data}\label{rtcga.data-family-data}
@@ -106,16 +117,21 @@ RTCGA.data family contains 5 packages:
   \texttt{RTCGA.clinical} package containing clinical datasets from
   TCGA. Each cohort contains one dataset prepared in a tidy format. Each
   row, marked with patients' barcode, corresponds to one patient.
+  Clinical data format is explained here
+  \url{https://wiki.nci.nih.gov/display/TCGA/Clinical+Data+Overview}
 \item
   \texttt{RTCGA.rnaseq} package containing genes' expressions datasets
   from TCGA. Each cohort contains one dataset with over 20 thousand of
   columns corresponding to genes' expression. Rows correspond to
-  patients, that can be matched with patient's barcode.
+  patients, that can be matched with patient's barcode. Genes'
+  expressions data format is explained here
+  \url{https://wiki.nci.nih.gov/display/TCGA/RNASeq+Version+2}
 \item
   \texttt{RTCGA.mutations} package containint genes' mutations datsets
   from TCGA. Each cohort contains one dataset with extra column
   specifying patient's barcode which enables to distinguish which rows
-  correspond to which patient.
+  correspond to which patient. Mutations' data format is explained here
+  \url{https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+(MAF)+Specification}.
 \item
   \texttt{RTCGA.cnv} package \textcolor{red}{ explanation needed.}
 \item
@@ -127,53 +143,52 @@ are shown in Table \ref{data_details}
 
 \tiny
 
-\begin{table}[h!]
-
-\begin{tabular}{lrrrrrr}
-\toprule
-Disease Name & Cohort & *.clinical & *.mutations & *.rnaseq & *.cnv & *.PANCAN12 \\
-\toprule
-Adrenocortical carcinoma &  ACC & \ & \ & \ & \ & \ \\
-Bladder urothelial carcinoma &  BLCA& \ & \ & \ & \ & \ \\
-Breast invasive carcinoma & BRCA    & \ & \ & \ & \ & \ \\
-Cervical and endocervical cancers & CESC    & \ & \ & \ & \ & \ \\
-Cholangiocarcinoma &    CHOL    & \ & \ & \ & \ & \ \\
-Colon adenocarcinoma     & COAD & \ & \ & \ & \ & \ \\
-Colorectal adenocarcinoma & COADREAD    & \ & \ & \ & \ & \ \\
-Lymphoid Neoplasm Diffuse & DLBC    & \ & \ & \ & \ & \ \\
-Esophageal carcinoma &  ESCA    & \ & \ & \ & \ & \ \\
-FFPE Pilot Phase II  & FPPP & \ & \ & \ & \ & \ \\
-Glioblastoma multiforme & GBM & \ & \ & \ & \ & \   \\
-Glioma &    GBMLGG  & \ & \ & \ & \ & \ \\
-Head and Neck squamous cell carcinoma & HNSC& \ & \ & \ & \ & \ \\
-Kidney Chromophobe &    KICH    & \ & \ & \ & \ & \ \\
-Pan-kidney cohort (KICH+KIRC+KIRP) &    KIPAN   & \ & \ & \ & \ & \ \\
-Kidney renal clear cell carcinoma & KIRC    & \ & \ & \ & \ & \ \\
-Kidney renal papillary cell carcinoma & KIRP & \ & \ & \ & \ & \    \\
-Acute Myeloid Leukemia &    LAML    & \ & \ & \ & \ & \ \\
-Brain Lower Grade Glioma &  LGG & \ & \ & \ & \ & \ \\
-Liver hepatocellular carcinoma &    LIHC & \ & \ & \ & \ & \    \\
-Lung adenocarcinoma &   LUAD    & \ & \ & \ & \ & \ \\
-Lung squamous cell carcinoma &  LUSC & \ & \ & \ & \ & \    \\
-Mesothelioma &  MESO    & \ & \ & \ & \ & \ \\
-Ovarian serous cystadenocarcinoma & OV & \ & \ & \ & \ & \  \\
-Pancreatic adenocarcinoma & PAAD    & \ & \ & \ & \ & \ \\
-Pheochromocytoma and Paraganglioma &    PCPG & \ & \ & \ & \ & \    \\
-Prostate adenocarcinoma &   PRAD & \ & \ & \ & \ & \    \\
-Rectum adenocarcinoma & READ & \ & \ & \ & \ & \    \\
-Sarcoma &   SARC    & \ & \ & \ & \ & \ \\
-Skin Cutaneous Melanoma &   SKCM    & \ & \ & \ & \ & \ \\
-Stomach adenocarcinoma &    STAD    & \ & \ & \ & \ & \ \\
-Stomach and Esophageal carcinoma &  STES    & \ & \ & \ & \ & \ \\
-Testicular Germ Cell Tumors &   TGCT    & \ & \ & \ & \ & \ \\
-Thyroid carcinoma & THCA    & \ & \ & \ & \ & \ \\
-Thymoma &   THYM    & \ & \ & \ & \ & \ \\
-Uterine Corpus Endometrial Carcinoma &  UCEC & \ & \ & \ & \ & \    \\
-Uterine Carcinosarcoma &    UCS & \ & \ & \ & \ & \ \\
-Uveal Melanoma &    UVM & \ & \ & \ & \ & \ \\
-\bottomrule
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlllll}
+  \toprule
+ & Disease Name & Cohort & Cases & clinical & cnv \\ 
+  \toprule
+1 & Adrenocortical carcinoma & ACC & 92 & 92x1046 & 21052x6 \\ 
+  2 & Bladder urothelial carcinoma & BLCA & 412 & 393x1978 & 105795x6 \\ 
+  3 & Breast invasive carcinoma & BRCA & 1098 & 1080x3464 & 284510x6 \\ 
+  4 & Cervical and endocervical cancers & CESC & 307 & 304x1556 & 59450x6 \\ 
+  5 & Cholangiocarcinoma & CHOL & 36 & 36x794 & 7570x6 \\ 
+  6 & Colon adenocarcinoma & COAD & 460 & 453x2935 & 91166x6 \\ 
+  7 & Colorectal adenocarcinoma & COADREAD & 631 & 624x3241 & 126931x6 \\ 
+  8 & Lymphoid Neoplasm Diffuse Large B-cell Lymphoma & DLBC & 58 & 47x693 & 9343x6 \\ 
+  9 & Esophageal carcinoma & ESCA & 185 & 174x1115 & 60803x6 \\ 
+  10 & FFPE Pilot Phase II & FPPP & 38 & 38x3277 &  \\ 
+  11 & Glioblastoma multiforme & GBM & 613 & 592x4935 & 146852x6 \\ 
+  12 & Glioma & GBMLGG & 1129 & 1067x5158 & 226643x6 \\ 
+  13 & Head and Neck squamous cell carcinoma & HNSC & 528 & 522x1625 & 110289x6 \\ 
+  14 & Kidney Chromophobe & KICH & 113 & 110x854 & 10164x6 \\ 
+  15 & Pan-kidney cohort (KICH+KIRC+KIRP) & KIPAN & 973 & 914x2554 & 142122x6 \\ 
+  16 & Kidney renal clear cell carcinoma & KIRC & 537 & 533x2474 & 85044x6 \\ 
+  17 & Kidney renal papillary cell carcinoma & KIRP & 323 & 271x1746 & 46914x6 \\ 
+  18 & Acute Myeloid Leukemia & LAML & 200 & 200x1148 & 28324x6 \\ 
+  19 & Brain Lower Grade Glioma & LGG & 516 & 475x1940 & 79791x6 \\ 
+  20 & Liver hepatocellular carcinoma & LIHC & 377 & 363x1441 & 93328x6 \\ 
+  21 & Lung adenocarcinoma & LUAD & 585 & 521x2765 & 122927x6 \\ 
+  22 & Lung squamous cell carcinoma & LUSC & 504 & 495x2487 & 134864x6 \\ 
+  23 & Mesothelioma & MESO & 87 & 77x855 & 18335x6 \\ 
+  24 & Ovarian serous cystadenocarcinoma & OV & 602 & 591x3305 & 261680x6 \\ 
+  25 & Pancreatic adenocarcinoma & PAAD & 185 & 174x1148 & 34808x6 \\ 
+  26 & Pheochromocytoma and Paraganglioma & PCPG & 179 & 179x1102 & 31256x6 \\ 
+  27 & Prostate adenocarcinoma & PRAD & 499 &  & 117345x6 \\ 
+  28 & Rectum adenocarcinoma & READ & 171 & 171x2492 & 35765x6 \\ 
+  29 & Sarcoma & SARC & 260 &  & 106617x6 \\ 
+  30 & Skin Cutaneous Melanoma & SKCM & 470 & 447x1750 & 108084x6 \\ 
+  31 & Stomach adenocarcinoma & STAD & 443 & 438x1583 & 118389x6 \\ 
+  32 & Stomach and Esophageal carcinoma & STES & 628 & 612x1719 &  \\ 
+  33 & Testicular Germ Cell Tumors & TGCT & 150 & 133x924 & 24952x6 \\ 
+  34 & Thyroid carcinoma & THCA & 503 & 501x1556 & 55377x6 \\ 
+  35 & Thymoma & THYM & 124 & 122x771 & 15571x6 \\ 
+  36 & Uterine Corpus Endometrial Carcinoma & UCEC & 560 & 537x2038 & 127430x6 \\ 
+  37 & Uterine Carcinosarcoma & UCS & 57 & 57x876 & 19298x6 \\ 
+  38 & Uveal Melanoma & UVM & 80 & 80x541 & 12973x6 \\ 
+   \bottomrule
 \end{tabular}
-
 \end{table}
 
 \normalsize
