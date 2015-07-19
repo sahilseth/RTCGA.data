@@ -7,18 +7,19 @@ Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) insta
 
 ```{Ruby}
 if (!require(devtools)) {
-    install.packages("devtools")
-    require(devtools)
+   install.packages("devtools")
+   require(devtools)
 }
-install_github("mi2-warsaw/RTCGA.data", 
-               subdir = paste0("RTCGA.", 
-                              c("clinical",
-                                 "rnaseq",
-                                 "mutations",
-                                 "cnv",
-                                 "PANCAN12")
+install_github(paste0("mi2-warsaw/RTCGA.data/", 
+                  subdir = paste0("RTCGA.", 
+                                  c("clinical",
+                                    "rnaseq",
+                                    "mutations",
+                                    "cnv",
+                                    "PANCAN12")
                                  )
                )
+)
 ```
 
 <h5> The list of available datasets: </h5>
