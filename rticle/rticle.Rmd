@@ -15,9 +15,8 @@ author:
     email:  Przemyslaw.Biecek@gmail.com
 abstract: >
   The following article presents RTCGA.data: a family of R packages containing The Cancer Genome Atlas Project (TCGA) data. The Cancer Genome Atlas (TCGA) is a comprehensive and coordinated effort to accelerate our understanding of the molecular basis of cancer through the application of genome analysis technologies, including large-scale genome sequencing (1). We provide TCGA data in few separate packages that are hosted on one GitHub repository, what made those luxurious data easier to possess and manage. We hope providing researchers with comprehensive catalogs of the key genomic changes in many major types and subtypes of cancer will support advances in developing more effective ways to diagnose, treat and prevent cancer. 
-preamble: >
-  % Any extra latex you need in the preamble
-  \usepackage{wrapfig,booktabs}
+preamble: > 
+   \usepackage{rotating}
 output: rticles::rjournal_article
 ---
 
@@ -53,11 +52,11 @@ if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
-install_github("mi2-warsaw/RTCGA.data", 
-                subdir = paste0("RTCGA.", 
-                                c("clinical", "rnaseq", "mutations", "cnv", "PANCAN12")
-                               )
- )
+install_github(paste0("mi2-warsaw/RTCGA.data/", 
+                  subdir = paste0("RTCGA.", 
+                                  c("clinical", "rnaseq",
+                                    "mutations", "cnv", "PANCAN12")
+                                 )))
 ```
 
 One package, i.e. `RTCGA.clinical` can be installed with the command
@@ -73,7 +72,7 @@ install_github("mi2-warsaw/RTCGA.data",
 
 If you are using Windows, make sure you have rtools [3] installed on your computer, before evaluating aboved commands.
 
-RTCGA.data family contains 5 packages:
+\pkg{RTCGA.data} family contains 5 packages:
 
 - `RTCGA.clinical` package containing clinical datasets from TCGA. Each cohort contains one dataset prepared in a tidy format. Each row, marked with patients' barcode, corresponds to one patient. Clinical data format is explained here https://wiki.nci.nih.gov/display/TCGA/Clinical+Data+Overview
 - `RTCGA.rnaseq` package containing genes' expressions datasets from TCGA. Each cohort contains one dataset with over 20 thousand of columns corresponding to genes' expression. Rows correspond to patients, that can be matched with patient's barcode. Genes' expressions data format is explained here https://wiki.nci.nih.gov/display/TCGA/RNASeq+Version+2
@@ -81,178 +80,215 @@ RTCGA.data family contains 5 packages:
 - `RTCGA.cnv` package \textcolor{red}{ explanation needed.}
 - `RTCGA.PANCAN12` package \textcolor{red}{ explanation needed.}
 
-More detailed information about datasets included in RTCGA.data family are shown in Table \ref{data_details}
+More detailed information about datasets included in \pkg{RTCGA.data} family are shown in Table \ref{data_details}
 
 
 ```{r, echo=FALSE}
-
-library(XML)
-readHTMLTable("http://gdac.broadinstitute.org/") -> df
-df[[39]][,1:3]
-library(RTCGA.clinical)
-data("ACC.clinical")
-data("BLCA.clinical")
-data("BRCA.clinical")
-data("CESC.clinical")
-data("CHOL.clinical")
-data("COAD.clinical")
-data("COADREAD.clinical")
-data("COADREAD.clinical")
-data("DLBC.clinical")
-data("ESCA.clinical")
-data("FPPP.clinical")
-data("GBM.clinical")
-data("GBMLGG.clinical")
-data("HNSC.clinical")
-data("KICH.clinical")
-data("KIPAN.clinical")
-data("KIRC.clinical")
-data("KIRP.clinical")
-data("LAML.clinical")
-data("LGG.clinical")
-data("LIHC.clinical")
-data("LUAD.clinical")
-data("LUSC.clinical")
-data("MESO.clinical")
-data("OV.clinical")
-data("PAAD.clinical")
-data("PCPG.clinical")
-data("READ.clinical")
-data("SKCM.clinical")
-data("STAD.clinical")
-data("STES.clinical")
-data("TGCT.clinical")
-data("THCA.clinical")
-data("THYM.clinical")
-data("UCEC.clinical")
-data("UCS.clinical")
-data("UVM.clinical")
 library(dplyr)
-ls() %>% grep("clinical", x = ., value = TRUE) %>%
-   sapply( function(element){
-      get(element, envir = .GlobalEnv) %>% dim()
-   }) %>% t -> clinical_df
+library(XML)
 library(stringi)
- clinical_dims <- data.frame( "Cohort" = stri_extract_all_regex(row.names(clinical_df),
-                                                                      pattern = "[^\\.clinical]") %>%
-                                                                        lapply( stri_flatten) %>% 
-                                                                        unlist,
-                             clinical = paste0(clinical_df[,1],"x",clinical_df[,2])
- )
- 
+readHTMLTable("http://gdac.broadinstitute.org/") -> df
  info <- df[[39]][,1:3]
-left_join( x = info , y = clinical_dims, by = "Cohort")
 
-library(RTCGA.cnv) 
-#?cnv 
-data("ACC.cnv")
-data("BLCA.cnv")
-data("BRCA.cnv")
-data("CESC.cnv")
-data("CHOL.cnv")
-data("COAD.cnv")
-data("COADREAD.cnv")
-data("DLBC.cnv")
-data("ESCA.cnv")
-data("GBM.cnv")
-data("GBMLGG.cnv")
-data("HNSC.cnv")
-data("KICH.cnv")
-data("KIPAN.cnv")
-data("KIRC.cnv")
-data("KIRP.cnv")
-data("LAML.cnv")
-data("LGG.cnv")
-data("LIHC.cnv")
-data("LUAD.cnv")
-data("LUSC.cnv")
-data("MESO.cnv")
-data("OV.cnv")
-data("PAAD.cnv")
-data("PCPG.cnv")
-data("PRAD.cnv")
-data("READ.cnv")
-data("SARC.cnv")
-data("SKCM.cnv")
-data("STAD.cnv")
-data("TGCT.cnv")
-data("THCA.cnv")
-data("THYM.cnv")
-data("UCEC.cnv")
-data("UCS.cnv")
-data("UVM.cnv")
-ls() %>% grep("cnv", x = ., value = TRUE) %>%
-   sapply( function(element){
-      get(element, envir = .GlobalEnv) %>% dim()
-   }) %>% t -> cnv_df
- cnv_dims <- data.frame( "Cohort" = stri_extract_all_regex(row.names(cnv_df),
-                                                                      pattern = "[^\\.cnv]") %>%
-                                                                        lapply( stri_flatten) %>% 
-                                                                        unlist,
-                             cnv = paste0(cnv_df[,1],"x",cnv_df[,2])
- )
+# this function produces information correspoding to Table nr 1
+
+show_dims_RTCGA <- function( package_name ){
+   data(package = paste0("RTCGA.", package_name))$results[,3] %>% 
+      sapply( function(element){
+         #get(element, envir = .GlobalEnv) %>% dim()
+         data(list=element, 
+              package = paste0("RTCGA.", package_name),
+              envir = .GlobalEnv)
+         get(element, envir = .GlobalEnv) %>% dim() -> res
+         rm(list = element, envir = .GlobalEnv)
+         return(res)
+      }) %>% t -> df
+   
+    df_dims <- data.frame( "Cohort" = 
+                                    stri_extract_all_regex(row.names(df),
+                                                pattern = paste0("[^\\.",package_name,"]")) %>%
+                                                lapply( stri_flatten) %>% 
+                                                unlist,
+                                package_name = paste0(df[,1]," x ",df[,2])
+    )
+    names(df_dims)[2] <- package_name
+    return(df_dims)
+}
  
- left_join(
-    left_join( x = info , y = clinical_dims, by = "Cohort"), cnv_dims, by = "Cohort")
+library(RTCGA.clinical)
+library(RTCGA.rnaseq)
+library(RTCGA.mutations)
+library(RTCGA.cnv)
+library(RTCGA.PANCAN12)
+
+
+left_join( x = info , y = show_dims_RTCGA("clinical"), by = "Cohort") %>%
+   left_join( y = show_dims_RTCGA("cnv"), by="Cohort") %>%
+   left_join( y = show_dims_RTCGA("mutations"), by="Cohort") %>%
+   left_join( y = show_dims_RTCGA("rnaseq"), by="Cohort") %>%
+   xtable::xtable()
+      
+left_join( y = show_dims_RTCGA("PANCAN12"), by="Cohort")
+
+
+
 ```
 
 \tiny
-\begin{table}[ht]
+<!--
+\begin{sidewaystable}
+--> 
+\begin{widetable}[h]
 \centering
-\begin{tabular}{rlllll}
+\caption{\label{data_details}Dimensions of available datasets in \pkg{RTCGA.family}.}
+\begin{tabular}{rlllllll}
   \toprule
- & Disease Name & Cohort & Cases & clinical & cnv \\ 
+ & Disease Name & Cohort & Cases & clinical & cnv\footnote{The second dimension is always equal to 6.} & mutations & rnaseq\footnote{The first dimension is always equal to 20532.} \\ 
   \toprule
-1 & Adrenocortical carcinoma & ACC & 92 & 92x1046 & 21052x6 \\ 
-  2 & Bladder urothelial carcinoma & BLCA & 412 & 393x1978 & 105795x6 \\ 
-  3 & Breast invasive carcinoma & BRCA & 1098 & 1080x3464 & 284510x6 \\ 
-  4 & Cervical and endocervical cancers & CESC & 307 & 304x1556 & 59450x6 \\ 
-  5 & Cholangiocarcinoma & CHOL & 36 & 36x794 & 7570x6 \\ 
-  6 & Colon adenocarcinoma & COAD & 460 & 453x2935 & 91166x6 \\ 
-  7 & Colorectal adenocarcinoma & COADREAD & 631 & 624x3241 & 126931x6 \\ 
-  8 & Lymphoid Neoplasm Diffuse Large B-cell Lymphoma & DLBC & 58 & 47x693 & 9343x6 \\ 
-  9 & Esophageal carcinoma & ESCA & 185 & 174x1115 & 60803x6 \\ 
-  10 & FFPE Pilot Phase II & FPPP & 38 & 38x3277 &  \\ 
-  11 & Glioblastoma multiforme & GBM & 613 & 592x4935 & 146852x6 \\ 
-  12 & Glioma & GBMLGG & 1129 & 1067x5158 & 226643x6 \\ 
-  13 & Head and Neck squamous cell carcinoma & HNSC & 528 & 522x1625 & 110289x6 \\ 
-  14 & Kidney Chromophobe & KICH & 113 & 110x854 & 10164x6 \\ 
-  15 & Pan-kidney cohort (KICH+KIRC+KIRP) & KIPAN & 973 & 914x2554 & 142122x6 \\ 
-  16 & Kidney renal clear cell carcinoma & KIRC & 537 & 533x2474 & 85044x6 \\ 
-  17 & Kidney renal papillary cell carcinoma & KIRP & 323 & 271x1746 & 46914x6 \\ 
-  18 & Acute Myeloid Leukemia & LAML & 200 & 200x1148 & 28324x6 \\ 
-  19 & Brain Lower Grade Glioma & LGG & 516 & 475x1940 & 79791x6 \\ 
-  20 & Liver hepatocellular carcinoma & LIHC & 377 & 363x1441 & 93328x6 \\ 
-  21 & Lung adenocarcinoma & LUAD & 585 & 521x2765 & 122927x6 \\ 
-  22 & Lung squamous cell carcinoma & LUSC & 504 & 495x2487 & 134864x6 \\ 
-  23 & Mesothelioma & MESO & 87 & 77x855 & 18335x6 \\ 
-  24 & Ovarian serous cystadenocarcinoma & OV & 602 & 591x3305 & 261680x6 \\ 
-  25 & Pancreatic adenocarcinoma & PAAD & 185 & 174x1148 & 34808x6 \\ 
-  26 & Pheochromocytoma and Paraganglioma & PCPG & 179 & 179x1102 & 31256x6 \\ 
-  27 & Prostate adenocarcinoma & PRAD & 499 &  & 117345x6 \\ 
-  28 & Rectum adenocarcinoma & READ & 171 & 171x2492 & 35765x6 \\ 
-  29 & Sarcoma & SARC & 260 &  & 106617x6 \\ 
-  30 & Skin Cutaneous Melanoma & SKCM & 470 & 447x1750 & 108084x6 \\ 
-  31 & Stomach adenocarcinoma & STAD & 443 & 438x1583 & 118389x6 \\ 
-  32 & Stomach and Esophageal carcinoma & STES & 628 & 612x1719 &  \\ 
-  33 & Testicular Germ Cell Tumors & TGCT & 150 & 133x924 & 24952x6 \\ 
-  34 & Thyroid carcinoma & THCA & 503 & 501x1556 & 55377x6 \\ 
-  35 & Thymoma & THYM & 124 & 122x771 & 15571x6 \\ 
-  36 & Uterine Corpus Endometrial Carcinoma & UCEC & 560 & 537x2038 & 127430x6 \\ 
-  37 & Uterine Carcinosarcoma & UCS & 57 & 57x876 & 19298x6 \\ 
-  38 & Uveal Melanoma & UVM & 80 & 80x541 & 12973x6 \\ 
+1 & Adrenocortical carcinoma & ACC & 92 & 92 x 1046 & 21052  & 20255 x 53 &   80 \\ 
+  2 & Bladder urothelial carcinoma & BLCA & 412 & 393 x 1978 & 105795  & 39441 x 96 &   428 \\ 
+  3 & Breast invasive carcinoma & BRCA & 1098 & 1080 x 3464 & 284510  & 91471 8 &   1213 \\ 
+  4 & Cervical and endocervical cancers & CESC & 307 & 304 x 1556 & 59450  & 46740 x 58 &   310 \\ 
+  5 & Cholangiocarcinoma & CHOL & 36 & 36 x 794 & 7570  & 6789 x 49 &   46 \\ 
+  6 & Colon adenocarcinoma & COAD & 460 & 453 x 2935 & 91166  & 62683 x 40 &   329 \\ 
+  7 & Colorectal adenocarcinoma & COADREAD & 631 & 624 x 3241 & 126931  &  &   434 \\ 
+  8 & Lymphoid Neoplasm Diffuse ...\footnote{Lymphoid Neoplasm Diffuse Large B-cell Lymphoma} & DLBC & 58 & 47 93 & 9343  &  &   29 \\ 
+  9 & Esophageal carcinoma & ESCA & 185 & 174 x 1115 & 60803  &  &  \\ 
+  10 & FFPE Pilot Phase II & FPPP & 38 & 38 x 3277 &  &  &  \\ 
+  11 & Glioblastoma multiforme & GBM & 613 & 592 x 4935 & 146852  & 22362 x 80 &   167 \\ 
+  12 & Glioma & GBMLGG & 1129 & 1067 x 5158 & 226643  &  &   697 \\ 
+  13 & Head and Neck squamous cell carcinoma & HNSC & 528 & 522 x 1625 & 110289  & 52077 x 90 &   567 \\ 
+  14 & Kidney Chromophobe & KICH & 113 & 110 x 854 & 10164  & 7624 x 37 &   92 \\ 
+  15 & Pan-kidney cohort (KICH+KIRC+KIRP) & KIPAN & 973 & 914 x 2554 & 142122  & 73527 x 36 &   1021 \\ 
+  16 & Kidney renal clear cell carcinoma & KIRC & 537 & 533 x 2474 & 85044  & 26785 x 36 &   607 \\ 
+  17 & Kidney renal papillary cell carcinoma & KIRP & 323 & 271 x 1746 & 46914  & 15745 x 53 &   324 \\ 
+  18 & Acute Myeloid Leukemia & LAML & 200 & 200 x 1148 & 28324  & 2781 5 &   174 \\ 
+  19 & Brain Lower Grade Glioma & LGG & 516 & 475 x 1940 & 79791  & 10170 x 39 &   531 \\ 
+  20 & Liver hepatocellular carcinoma & LIHC & 377 & 363 x 1441 & 93328  & 28089 x 49 &   424 \\ 
+  21 & Lung adenocarcinoma & LUAD & 585 & 521 x 2765 & 122927  & 72770 x 92 &   577 \\ 
+  22 & Lung squamous cell carcinoma & LUSC & 504 & 495 x 2487 & 134864  & 65482 x 87 &   553 \\ 
+  23 & Mesothelioma & MESO & 87 & 77 x 855 & 18335  &  &   87 \\ 
+  24 & Ovarian serous cystadenocarcinoma & OV & 602 & 591 x 3305 & 261680  & 20534 x 44 &   266 \\ 
+  25 & Pancreatic adenocarcinoma & PAAD & 185 & 174 x 1148 & 34808  & 37850 x 85 &   184 \\ 
+  26 & Pheochromocytoma and Paraganglioma & PCPG & 179 & 179 x 1102 & 31256  & 4784 x 91 &   188 \\ 
+  27 & Prostate adenocarcinoma & PRAD & 499 &  & 117345  & 27687 x 91 &   551 \\ 
+  28 & Rectum adenocarcinoma & READ & 171 & 171 x 2492 & 35765  & 22143 x 40 &   106 \\ 
+  29 & Sarcoma & SARC & 260 &  & 106617  &  &  \\ 
+  30 & Skin Cutaneous Melanoma & SKCM & 470 & 447 x 1750 & 108084  & 290666 x 91 &   473 \\ 
+  31 & Stomach adenocarcinoma & STAD & 443 & 438 x 1583 & 118389  & 148808 x 80 &  \\ 
+  32 & Stomach and Esophageal carcinoma & STES & 628 & 612 x 1719 & 179192  & 148808 x 80 &  \\ 
+  33 & Testicular Germ Cell Tumors & TGCT & 150 & 133 x 924 & 24952  & 14826 x 58 &   157 \\ 
+  34 & Thyroid carcinoma & THCA & 503 & 501 x 1556 & 55377  & 7862 x 91 &   569 \\ 
+  35 & Thymoma & THYM & 124 & 122 x 771 & 15571  &  &   123 \\ 
+  36 & Uterine Corpus Endometrial Carcinoma & UCEC & 560 & 537 x 2038 & 127430  & 185108 x 50 &   202 \\ 
+  37 & Uterine Carcinosarcoma & UCS & 57 & 57 x 876 & 19298  & 11395 x 91 &   58 \\ 
+  38 & Uveal Melanoma & UVM & 80 & 80 x 541 & 12973  & 2607 x 91 &   81 \\ 
    \bottomrule
 \end{tabular}
-\end{table}
+\end{widetable}
+<!--
+\end{sidewaystable}
+--> 
 \normalsize
+
 
 ## How to work with RTCGA.data family
 
+After installation, one can load any package from \pkg{RTCGA.data} family with commands
+```{r}
+library(RTCGA.clinical)
+library(RTCGA.rnaseq)
+library(RTCGA.mutations)
+library(RTCGA.PANCAN12)
+library(RTCGA.cnv)
+```
+
+and one can check what datasets are available (Table \ref{data_details}) with commands
+```{r}
+?clinical
+?rnaseq
+?mutations
+?pancan12
+?cnv
+```
+
+The data loading proceeds in a regular way. Simply type
+```{r}
+data(cohort.package)
+```
+Where `cohort` corresponds to a specific Cohort of patients and `package` corresponds to the one of five packages from \pkg{RTCGA.data} family. 
+
+Examples
+```{r}
+data("BRCA.cnv")
+data(COAD.rnaseq)
+data("GBMLGG.mutations")
+```
 
 ## Patient's barcode as a key to merge data 
 
+A TCGA barcode is composed of a collection of identifiers. Each specifically identifies a TCGA data element. Refer to the following figure for an illustration of how metadata identifiers comprise a barcode. An aliquot barcode, an example of which shows in the illustration, contains the highest number of identifiers [4]. An illustration on what each part of the patient's barcode stands for is shown on Figure \ref{barcode}.
 
-## Applications examples
+\begin{figure}[h!]
+\includegraphics[width=14cm]{barcode.png}
+\caption{\label{barcode}This figure of an aliquot barcode shows how it can be broken down into its components and translated into its metadata. Source [4]}
+\end{figure}
+
+More detailed information about patients' barcodes can be found on [4].
+
+## Examples of applications
+
+### Kaplan-Meier survival curves
+\pkg{RTCGA.data} family is excellent when one researches in a field of survival analysis and genomics.
+Survival times for patients are included in clinical datasets. The following example plots Kaplan-Meier [5] estimates of the survival functions for patients suffering from LUAD cancer, divided into stage of the cancer.
+```{r, eval=TRUE, cache=TRUE, results='hide', echo=1:10}
+library(dplyr)
+library(archivist)
+library(RTCGA.clinical)
+library(survival)
+library(survMisc)
+library(ggplot2)
+createEmptyRepo("RTCGA.family")
+setLocalRepo("RTCGA.family")
+mergeStages <- function( patient.stage_event.pathologic_stage ){
+   levels(patient.stage_event.pathologic_stage) <- c(rep("1",3), rep("2",3), 
+                                                     rep("3",2), "4")
+   patient.stage_event.pathologic_stage %>%
+      as.character %>% as.numeric()
+}
+LUAD.clinical %a%
+   select(  patient.days_to_last_followup,
+            patient.stage_event.pathologic_stage,
+            patient.drugs.drug.therapy_types.therapy_type,
+            patient.vital_status,
+            patient.days_to_death
+   ) %a%
+   mutate(
+      patient.days_to_death = patient.days_to_death%>%  as.character() %>%  as.numeric(),
+      patient.days_to_last_followup = patient.days_to_last_followup%>% as.character() %>% as.numeric(),
+      patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0)
+   ) %a%
+   mutate(
+      times = ifelse( !is.na(patient.days_to_last_followup),
+                 patient.days_to_last_followup,
+                 patient.days_to_death),
+      stage = mergeStages(LUAD.clinical$patient.stage_event.pathologic_stage)
+   ) %a%
+   filter( !is.na(times) ) %a%
+   survfit( Surv(times, patient.vital_status)~ stage, data = .) %a%
+   survMisc:::autoplot.survfit( titleSize=12, type="CI") %a%
+   .[[2]] -> km_plot_luad
+
+   pdf( file = "km_plot_luad.pdf")
+   km_plot_luad
+   dev.off()
+```
+
+\begin{figure}[h!]
+\includegraphics[width=14cm, height=8cm]{km_plot_luad.pdf}
+\caption{\label{km_plot}Kaplan-Meier estimate of survival curve for the LUAD cancer. Plot is available via code \code{aread(mi2-warsaw/rticle/RTCGA.family/857415c30aa6f9d1fac345c54c447b46)}}
+\end{figure}
+
 
 
 ```{r, eval=FALSE}
@@ -261,6 +297,10 @@ ls() %>% grep("cnv", x = ., value = TRUE) %>%
 [2] http://gdac.broadinstitute.org/
    
 [3] http://cran.r-project.org/bin/windows/Rtools/
+   
+[4] https://wiki.nci.nih.gov/display/TCGA/TCGA+barcode
+
+[5]  Kaplan, E. L.; Meier, P. (1958). "Nonparametric estimation from incomplete observations". J. Amer. Statist. Assn. 53 (282): 457–481. JSTOR 2281868.
 
 \bibliography{RJreferences}
    
