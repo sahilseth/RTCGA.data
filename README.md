@@ -40,7 +40,7 @@ library(RTCGA.cnv)
 
 
 <h5> Installation of the `RTCGA` package: </h5>
-To get started, install the latest version of **RTCGA** from Bioconductor:
+To get started, install the latest version of **RTCGA** from GitHub:
 
 ```{Ruby}
 if (!require(devtools)) {
@@ -54,5 +54,6 @@ install_github("MarcinKosinski/RTCGA")
 
 >
 > Marcin Kosiński, m.p.kosinski@gmail.com
+>
 > Przemysław Biecek, przemyslaw.biecek@gmail.com
 >
