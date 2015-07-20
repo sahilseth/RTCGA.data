@@ -236,16 +236,17 @@ More detailed information about patients' barcodes can be found on [4].
 
 # Examples of applications
 
-## Kaplan-Meier survival curves
+## The Kaplan-Meier estimate of the survival curves with the clinical data
 \pkg{RTCGA.data} family is excellent when one researches in a field of survival analysis and genomics.
 Survival times for patients are included in clinical datasets. The following example plots Kaplan-Meier [5] estimates of the survival functions for patients suffering from LUAD cancer, divided into stage of the cancer.
-```{r, eval=TRUE, cache=TRUE, results='hide', echo=1:10}
+```{r, eval=TRUE, cache=TRUE, results='hide', echo=1:35}
 library(dplyr)
 library(archivist)
 library(RTCGA.clinical)
 library(survival)
 library(survMisc)
 library(ggplot2)
+
 createEmptyRepo("RTCGA.family")
 setLocalRepo("RTCGA.family")
 mergeStages <- function( patient.stage_event.pathologic_stage ){
@@ -259,18 +260,22 @@ LUAD.clinical %a%
             patient.stage_event.pathologic_stage,
             patient.drugs.drug.therapy_types.therapy_type,
             patient.vital_status,
-            patient.days_to_death
+            patient.days_to_death,
+            patient.bcr_patient_barcode
    ) %a%
    mutate(
       patient.days_to_death = patient.days_to_death%>%  as.character() %>%  as.numeric(),
       patient.days_to_last_followup = patient.days_to_last_followup%>% as.character() %>% as.numeric(),
-      patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0)
+      patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0),
+      barcode = patient.bcr_patient_barcode %>% as.character()
    ) %a%
    mutate(
       times = ifelse( !is.na(patient.days_to_last_followup),
                  patient.days_to_last_followup,
                  patient.days_to_death),
-      stage = mergeStages(LUAD.clinical$patient.stage_event.pathologic_stage),
+      stage = mergeStages(LUAD.clinical$patient.stage_event.pathologic_stage)
+   ) %a%
+   rename(
       therapy = patient.drugs.drug.therapy_types.therapy_type
    ) %a%
    filter( !is.na(times) ) -> LUAD.clinical.selected 
@@ -279,39 +284,111 @@ LUAD.clinical %a%
    survMisc:::autoplot.survfit( titleSize=12, type="CI") %a%
    .[[2]] -> km_plot_luad
 
-   pdf( file = "km_plot_luad.pdf")
+   pdf(file = "km_plot_luad.pdf")
    km_plot_luad
    dev.off()
 ```
 
 \begin{figure}[h!]
-\includegraphics[width=14cm, height=8cm]{km_plot_luad.pdf}
-\caption{\label{km_plot}Kaplan-Meier estimate of survival curve for the LUAD cancer. Plot is available via code \code{aread(mi2-warsaw/rticle/RTCGA.family/857415c30aa6f9d1fac345c54c447b46)}}
+\includegraphics[width=14cm, height=10cm]{km_plot_luad.pdf}
+\caption{\label{km_plot}The Kaplan-Meier estimate of the survival curve for the LUAD cancer. The plot is available via code \code{aread(mi2-warsaw/rticle/RTCGA.family/857415c30aa6f9d1fac345c54c447b46)}}
 \end{figure}
 
-## Cox proportional hazards model
+\newpage
+
+## The Cox proportional hazards model with the genes' mutations data
+
+In a simple way one can use previously selected data to merge them with genes' mutations data and to compute Cox proportional hazards model.
 
 ```{r, eval=TRUE, cache=TRUE, warning=FALSE}
-LUAD.clinical.selected %>%
-      coxph(Surv(times, patient.vital_status)~ as.factor(stage)+therapy, data = .)
+   
+divideTP53 <- function( TP53 ){
+   TP53 <- as.character(TP53)
+   TP53 <- ifelse( (TP53  %in% c("")) | is.na(TP53), 
+                   "WILD", 
+                   TP53 )
+   TP53 <- ifelse( grepl( "Misse", TP53 ), 
+                   "Missense", 
+                   TP53 )
+   TP53 <- ifelse( !( TP53 %in% c("WILD", "Missense", NA) ),
+                   "Other",
+                   TP53 )
+   return(TP53)
+}
+library(RTCGA.mutations)
+LUAD.clinical.selected %a%
+      left_join( y = LUAD.mutations %a%
+                    filter( Hugo_Symbol == "TP53") %>%
+                    mutate( barcode = barcode %>% as.character %>% tolower %>% substr(1,12) ) %>%
+                    select( barcode, Variant_Classification),
+                 by = "barcode") %a%
+                    mutate( Variant_Classification = divideTP53(Variant_Classification) ) ->
+   LUAD.clinical.mutations.selected
+
+      coxph(Surv(times, patient.vital_status)~ as.factor(stage)+Variant_Classification,
+            data = LUAD.clinical.mutations.selected)
 ```
 
+The model is available via code \code{aread("mi2-warsaw....")}.
 
-## Principal components analysis for genes' expressions
+\newpage
 
-```{r}
-data(package = "RTCGA.rnaseq")$results[1:6,3] %>%
+## The Principal Components Analysis for the rnaseq data
+
+\textcolor{red}{Enhancement text needed.}
+
+
+
+\begin{Schunk} 
+\begin{Sinput}
+data(package = "RTCGA.rnaseq")\$results[1:6,3] %a%
    sapply(function(element){
       data(list=element, 
               package = "RTCGA.rnaseq",
               envir = .GlobalEnv)
-         get(element, envir = .GlobalEnv) %>% 
-            t %>%
-            as.data.frame 
-   }) -> rnaseq_sample
-simplify2array(rnaseq_sample) -> rnaseq_sample_array
-```
+      get(element, envir = .GlobalEnv) %>% 
+         t() %>%
+         .[-1,-1] 
+   }) %a%
+   do.call(rbind, .) %a%
+   apply( 2, function(x) as.numeric(as.character(x))) -> 
+   rnaseq_sample_joined_numeric
+          "8443b0fb0e5292f403260296458d7a97"
+rnaseq_sample_joined_numeric %a%
+   colSums() -> rnaseq_col_sums
 
+(rnaseq_col_sums == 0 ) %a%
+   which -> columns_with_only0
+
+rnaseq_sample_joined_numeric[,-columns_with_only0] %a%
+   prcomp( scale = TRUE ) -> PCA
+
+data(package = "RTCGA.rnaseq")$results[1:6,3] %a%
+   sapply(function(element){
+      get(element, envir = .GlobalEnv) %>% 
+         ncol() 
+   }) -> rnaseq_ncol
+
+mapply(rep, 
+       data(package = "RTCGA.rnaseq")$results[1:6,3], 
+       rnaseq_ncol-1) %a%
+   unlist -> rnaseq_pca_labels
+
+library(ggbiplot)
+rownames(PCA$rotation) <- 1:nrow(PCA$rotation)
+ggbiplot(PCA, obs.scale = 1, var.scale = 1,
+  groups = rnaseq_pca_labels, ellipse = TRUE, circle = TRUE, var.axes=FALSE) +
+  theme(legend.direction = 'horizontal', legend.position = 'top') ->x
+\end{Sinput}
+\end{Schunk}
+
+
+\begin{figure}[h!]
+\includegraphics[width=14cm]{biplot2.pdf}
+\caption{\label{biplot2}The biplot for 2 main components of principal component analysis of genes' expressions data for 6 various cancer types. The plot is available via code \code{aread(mi2-warsaw/rticle/RTCGA.family/md5hash)}}
+\end{figure}
+
+\newpage
 
 ```{r, eval=FALSE}
 [1] http://cancergenome.nih.gov/
