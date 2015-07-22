@@ -185,7 +185,7 @@ img {
 <p>There are many available date times of TCGA data releases. To see them all just type:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RTCGA)
 <span class="kw">availableDates</span>()</code></pre>
-<p>Version 0.1 of <code>RTCGA.mutations</code> package contains mutations datasets from <code>2015-04-02</code>. There were downloaded as follows (which is mainly copied from <a href="http://marcinkosinski.github.io/RTCGA/"><a href="http://marcinkosinski.github.io/RTCGA/" class="uri">http://marcinkosinski.github.io/RTCGA/</a></a>:</p>
+<p>Version 0.1 of <code>RTCGA.mutations</code> package contains mutations datasets from <code>2015-06-01</code>. There were downloaded as follows (which is mainly copied from <a href="http://marcinkosinski.github.io/RTCGA/"><a href="http://marcinkosinski.github.io/RTCGA/" class="uri">http://marcinkosinski.github.io/RTCGA/</a></a>:</p>
 <div id="available-cohorts" class="section level2">
 <h2>Available cohorts</h2>
 <p>All cohort names can be checked using:</p>
@@ -197,7 +197,7 @@ img {
 <div id="downloading-tarred-files" class="section level2">
 <h2>Downloading tarred files</h2>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#dir.create( &quot;data2&quot; )</span>
-date &lt;-<span class="st"> &quot;2015-04-02&quot;</span>
+date &lt;-<span class="st"> &quot;2015-06-01&quot;</span>
 <span class="kw">sapply</span>( cohorts, function(element){
 <span class="kw">tryCatch</span>({
 <span class="kw">downloadTCGA</span>( <span class="dt">cancerTypes =</span> element, 

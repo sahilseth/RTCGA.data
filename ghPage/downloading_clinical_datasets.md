@@ -29,7 +29,7 @@ library(RTCGA)
 availableDates()
 ```
 
-Version 0.1 of `RTCGA.clinical` package contains clinical datasets from `2015-04-02`.
+Version 0.1 of `RTCGA.clinical` package contains clinical datasets from `2015-06-01`.
 There were downloaded as follows (which is mainly copied from [http://marcinkosinski.github.io/RTCGA/](http://marcinkosinski.github.io/RTCGA/):
 
 ## Available cohorts
@@ -48,7 +48,7 @@ For all cohorts the following code downloads the clinical data.
 
 ```r
 #dir.create( "data2" )
-date <- "2015-04-02"
+date <- "2015-06-01"
 downloadTCGA( cancerTypes = cohorts, destDir = "data2/", date = date )
 ```
 
