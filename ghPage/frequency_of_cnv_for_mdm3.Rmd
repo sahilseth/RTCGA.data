@@ -2,11 +2,18 @@
 title: "Using `RTCGA` package to estimate a frequency of MDM2 duplications based on CNV data"
 author: "Przemyslaw Biecek"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Using RTCGA to estimate ratio of MDM2 duplications}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output: 
+   html_document:
+      fig_width: 17
+      fig_height: 10
+      toc: true
+      toc_depth: 3
+      theme: readable
+      highlight: pygments
+      keep_md: true
+      includes:
+         in_header: include/in_header.html
+         before_body: include/before_body.html
 ---
 
 ```{r, echo=FALSE}
@@ -24,7 +31,6 @@ if (!require(devtools)) {
     require(devtools)
 }
 if (!require(RTCGA.cnv)) {
-    install.packages("devtools")
     install_github("mi2-warsaw/RTCGA.data", subdir = "RTCGA.cnv")
     require(RTCGA.cnv)
 }

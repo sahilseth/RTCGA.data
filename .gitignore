@@ -51,3 +51,7 @@ vignettes/*.pdf
 *.tdo
 .Rproj.user
 packrat/lib*/
+*figure-html*
+ghPage/pancan12_files/figure-html/*
+ghPage/pancan12_files/figure-html/
+ghPage\pancan12_files\figure-html\
