@@ -3,8 +3,8 @@
 #'
 #' Package provides mutations datasets from The Cancer Genome Atlas Project for all cohorts types from \url{http://gdac.broadinstitute.org/}.
 #' Data were downloaded using \link{RTCGA-package}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.
-#' 
 #' Mutations data format is explained here https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+(MAF)+Specification. There is extra one column with patients' barcodes.
+#' 
 #' 
 #' @format NULL
 #' @source \url{http://gdac.broadinstitute.org/}

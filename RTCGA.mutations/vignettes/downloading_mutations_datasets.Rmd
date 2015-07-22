@@ -37,7 +37,7 @@ library(RTCGA)
 availableDates()
 ```
 
-Version 0.1 of `RTCGA.mutations` package contains mutations datasets from `2015-04-02`.
+Version 0.1 of `RTCGA.mutations` package contains mutations datasets from `2015-06-01`.
 There were downloaded as follows (which is mainly copied from [http://marcinkosinski.github.io/RTCGA/](http://marcinkosinski.github.io/RTCGA/):
 
 ## Available cohorts
@@ -54,7 +54,7 @@ For all cohorts the following code downloads the mutations data.
 ## Downloading tarred files
 ```{r}
 #dir.create( "data2" )
-date <- "2015-04-02"
+date <- "2015-06-01"
 sapply( cohorts, function(element){
 tryCatch({
 downloadTCGA( cancerTypes = element, 
@@ -153,7 +153,7 @@ list.files("data2/") %>%
               envir = .GlobalEnv )
 
       save( list= substr(element, start=7, stop=100),
-            file = paste0("RTCGA.mutations/data/",
+            file = paste0("data/",
                      substr(element, start=7, stop=100),
                      ".rda"))
       rm(list = substr(element, start=7, stop=100), envir = .GlobalEnv)
