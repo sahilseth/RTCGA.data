@@ -3,7 +3,6 @@
 #'
 #' Package provides clinical datasets from The Cancer Genome Atlas Project for all cohorts types from \url{http://gdac.broadinstitute.org/}.
 #' Data were downloaded using \link{RTCGA-package}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.
-#' 
 #' Clinical data format is explained here \url{https://wiki.nci.nih.gov/display/TCGA/Clinical+Data+Overview}.
 #' 
 #' @format NULL
