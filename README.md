@@ -1,9 +1,10 @@
 # The family of R packages containing TCGA data
 
-Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) installed on your computer.
+[Contribution: Adding a new package to the `RTCGA.data` family](https://github.com/mi2-warsaw/RTCGA.data/wiki/Contribution:-Adding-a-new-package-to-the-%60RTCGA.data%60-family)
 
 ### Installation of packages from the `RTCGA.data` family: 
 
+Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) installed on your computer.
 
 ```{Ruby}
 if (!require(devtools)) {
