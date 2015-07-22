@@ -2,7 +2,7 @@
 
 Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) installed on your computer.
 
-<h5> Installation of packages from the `RTCGA.data` family : </h5>
+### Installation of packages from the `RTCGA.data` family: 
 
 
 ```{Ruby}
@@ -39,7 +39,7 @@ library(RTCGA.cnv)
 # Packages from the `RTCGA.data`-family are based on the `RTCGA` package
 
 
-<h5> Installation of the `RTCGA` package: </h5>
+### Installation of the [`RTCGA`](https://github.com/MarcinKosinski/RTCGA) package: 
 To get started, install the latest version of **RTCGA** from GitHub:
 
 ```{Ruby}
