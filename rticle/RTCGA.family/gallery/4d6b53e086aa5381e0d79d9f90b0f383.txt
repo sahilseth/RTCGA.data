@@ -1,0 +1,14 @@
+  patient.days_to_last_followup patient.stage_event.pathologic_stage patient.drugs.drug.therapy_types.therapy_type patient.vital_status
+1                             0                             stage iv                                          <NA>                alive
+2                           395                           stage iiia                                          <NA>                alive
+3                          1158                             stage ib                                          <NA>                alive
+4                          <NA>                           stage iiia                                          <NA>                 dead
+5                           607                             stage ib                                          <NA>                alive
+6                           426                           stage iiia                                  chemotherapy                alive
+  patient.days_to_death patient.bcr_patient_barcode
+1                  <NA>                tcga-05-4244
+2                  <NA>                tcga-05-4245
+3                  <NA>                tcga-05-4249
+4                   121                tcga-05-4250
+5                  <NA>                tcga-05-4382
+6                  <NA>                tcga-05-4384
