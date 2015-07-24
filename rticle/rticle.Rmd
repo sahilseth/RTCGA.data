@@ -1,5 +1,5 @@
 ---
-title: RTCGA.data - The Family Of R Packages Containing TCGA Data
+title: RTCGA.data - The Family of R Packages with Data from The Cancer Genome Atlas Study
 author:
   - name: Marcin Kosinski
     affiliation: Warsaw University of Technology
@@ -10,11 +10,13 @@ author:
   - name: Przemysław Biecek
     affiliation: University of Warsaw
     address:
-    - line 1
-    - line 2
+    - Faculty of Mathematics, Informatics, and Mechanics
+    - Banacha 2, 02-097 Warsaw, Poland
     email:  Przemyslaw.Biecek@gmail.com
 abstract: >
-  The following article presents RTCGA.data: a family of R packages containing The Cancer Genome Atlas Project (TCGA) data. The Cancer Genome Atlas (TCGA) is a comprehensive and coordinated effort to accelerate our understanding of the molecular basis of cancer through the application of genome analysis technologies, including large-scale genome sequencing (1). We provide TCGA data in few separate packages that are hosted on one GitHub repository, what made those luxurious data easier to possess and manage. We hope providing researchers with comprehensive catalogs of the key genomic changes in many major types and subtypes of cancer will support advances in developing more effective ways to diagnose, treat and prevent cancer. 
+  The following article presents RTCGA.data: a family of R packages containing The Cancer Genome Atlas Project (TCGA) data. The Cancer Genome Atlas (TCGA) is a comprehensive and coordinated effort to accelerate our understanding of the molecular basis of cancer through the application of genome analysis technologies, including large-scale genome sequencing [1]. We converted selected datasets from this study into few separate packages that are hosted on one GitHub repository. These R packages make selected datasets easier to possess and manage. Data sets in RTCGA.data packages are large and cover complex repations between clinical outcomes and genetic backgroud. These packages will be usefull for at least three audiences: biostatisticians that work with cancer data; 
+  
+  We hope providing researchers with comprehensive catalogs of the key genomic changes in many major types and subtypes of cancer will support advances in developing more effective ways to diagnose, treat and prevent cancer. 
 preamble: > 
    \usepackage{rotating}
 output: rticles::rjournal_article
