@@ -36,7 +36,7 @@ install_github("MarcinKosinski/RTCGA")
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.
 
-# How to download clinical data to gain the sama datasets as in RTCGA.mutations package?
+# How to download clinical data to gain the same datasets as in RTCGA.mutations package?
 
 There are many available date times of TCGA data releases. To see them all just type:
 ```{r}
