@@ -4,3 +4,5 @@
 ^\.Rprofile$
 data2/
 index*
+.Rhistory
+.gitignore
