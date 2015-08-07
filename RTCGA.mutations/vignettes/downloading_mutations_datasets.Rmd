@@ -11,7 +11,7 @@ vignette: >
 
 ```{r, echo=FALSE}
 library(knitr)
-opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), cache=TRUE, eval = FALSE)
+opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), eval=FALSE)
 ```
 
 # RTCGA package

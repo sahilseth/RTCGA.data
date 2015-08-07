@@ -8,6 +8,7 @@
 #' @format NULL
 #' @source \url{http://gdac.broadinstitute.org/}
 #' 
+#' @import RTCGA
 #' @name rnaseq
 #' @rdname rnaseq
 #' @aliases ACC.rnaseq,BLCA.rnaseq,BRCA.rnaseq,CESC.rnaseq,CHOL.rnaseq,COAD.rnaseq,COADREAD.rnaseq,DLBC.rnaseq,ESCA.rnaseq,FPPP.rnaseq,GBM.rnaseq,GBMLGG.rnaseq,HNSC.rnaseq,KICH.rnaseq,KIPAN.rnaseq,KIRC.rnaseq,KIRP.rnaseq,LAML.rnaseq,LGG.rnaseq,LIHC.rnaseq,LUAD.rnaseq,LUSC.rnaseq,MESO.rnaseq,OV.rnaseq,PAAD.rnaseq,PCPG.rnaseq,PRAD.rnaseq,READ.rnaseq,SKCM.rnaseq,STAD.rnaseq,STES.rnaseq,TGCT.rnaseq,THCA.rnaseq,THYM.rnaseq,UCEC.rnaseq,UCS.rnaseq,UVM.rnaseq
@@ -48,6 +49,11 @@
 #' @format NULL
 #' 
 "DLBC.rnaseq"    
+#' @name rnaseq
+#' @rdname rnaseq
+#' @format NULL
+#' 
+"ESCA.rnaseq"
 #' @name rnaseq
 #' @rdname rnaseq
 #' @format NULL
@@ -142,7 +148,12 @@
 #' @rdname rnaseq
 #' @format NULL
 #' 
-"SKCM.rnaseq"    
+"SKCM.rnaseq"  
+#' @name rnaseq
+#' @rdname rnaseq
+#' @format NULL
+#' 
+"STES.rnaseq"   
 #' @name rnaseq
 #' @rdname rnaseq
 #' @format NULL

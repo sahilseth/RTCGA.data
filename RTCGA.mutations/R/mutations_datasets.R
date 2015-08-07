@@ -5,13 +5,13 @@
 #' Data were downloaded using \link{RTCGA-package}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.
 #' Mutations data format is explained here https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+(MAF)+Specification. There is extra one column with patients' barcodes.
 #' 
-#' 
+#' @import RTCGA
 #' @format NULL
 #' @source \url{http://gdac.broadinstitute.org/}
 #' 
 #' @name mutations
 #' @rdname mutations
-#' @aliases ACC.mutations,BLCA.mutations,BRCA.mutations,CESC.mutations,CHOL.mutations,COAD.mutations,GBM.mutations,HNSC.mutations,KICH.mutations,KIPAN.mutations,KIRC.mutations,KIRP.mutations,LAML.mutations,LGG.mutations,LIHC.mutations,LUAD.mutations,LUSC.mutations,OV.mutations,PAAD.mutations,PCPG.mutations,PRAD.mutations,READ.mutations,SKCM.mutations,STAD.mutations,STES.mutations,TGCT.mutations,THCA.mutations,UCEC.mutations,UCS.mutations,UVM.mutations
+#' @aliases ACC.mutations,BLCA.mutations,BRCA.mutations,CESC.mutations,CHOL.mutations,COAD.mutations,GBM.mutations,HNSC.mutations,KICH.mutations,KIPAN.mutations,KIRC.mutations,KIRP.mutations,LAML.mutations,LGG.mutations,LIHC.mutations,LUAD.mutations,LUSC.mutations,OV.mutations,PAAD.mutations,PCPG.mutations,PRAD.mutations,READ.mutations,SARC.mutations,SKCM.mutations,STAD.mutations,STES.mutations,TGCT.mutations,THCA.mutations,UCEC.mutations,UCS.mutations,UVM.mutations
 #'
 "ACC.mutations"
 #' @name mutations
@@ -134,6 +134,11 @@
 #' @format NULL
 #' 
 "STES.mutations"
+#' @name mutations
+#' @rdname mutations
+#' @format NULL
+#' 
+"SARC.mutations"
 #' @name mutations
 #' @rdname mutations
 #' @format NULL
