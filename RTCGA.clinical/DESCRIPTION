@@ -10,7 +10,7 @@ License: GPL-2
 LazyData: TRUE
 Repository: Bioconductor
 BugReports: https://github.com/mi2-warsaw/RTCGA.data/issues
-Depends: RTCGA
+Depends: R (>= 3.2.0), RTCGA
 Suggests: knitr
 biocViews: Annotation Data, TCGA, clinical
 Repository: Bioconductor

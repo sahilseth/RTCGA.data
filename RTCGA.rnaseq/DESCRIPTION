@@ -1,6 +1,6 @@
 Package: RTCGA.rnaseq
 Title: Rna-seq datasets from The Cancer Genome Atlas Project
-Version: 0.99.2
+Version: 0.99.4
 Date: 2015-08-05
 Author: Marcin Kosinski <m.p.kosinski@gmail.com>
 Maintainer: Marcin Kosinski <m.p.kosinski@gmail.com>
@@ -9,7 +9,8 @@ License: GPL-2
 LazyData: TRUE
 Repository: Bioconductor
 BugReports: https://github.com/mi2-warsaw/RTCGA.data/issues
-Depends: RTCGA, knitr
-biocViews: Annotation Data, TCGA, rnaseq
+Depends: R (>= 3.2.0), RTCGA
+Suggests: knitr
+biocViews: Annotation Data
 Repository: Bioconductor
 VignetteBuilder: knitr
