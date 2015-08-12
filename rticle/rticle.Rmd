@@ -379,7 +379,7 @@ ggbiplot(PCA, obs.scale = 1, var.scale = 1,
 
 \begin{figure}[h!]
 \includegraphics[width=14cm]{biplot2.pdf}
-\caption{\label{biplot2}The biplot for 2 main components of principal component analysis of genes' expressions data for 6 various cancer types. The plot is available via code \code{aread(mi2-warsaw/rticle/RTCGA.family/md5hash)}}
+\caption{\label{biplot2}The biplot for 2 main components of the principal component analysis of genes' expressions data for 6 various cancer types. The plot is available via code \code{aread(mi2-warsaw/rticle/RTCGA.family/md5hash)}}
 \end{figure}
 
 \newpage
