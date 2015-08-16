@@ -102,6 +102,9 @@ UCS.mutations
 
 UVM.mutations
 }
+\value{
+Data frames with mutations data.
+}
 \description{
 Package provides mutations datasets from The Cancer Genome Atlas Project for all cohorts types from \url{http://gdac.broadinstitute.org/}.
 Data were downloaded using \link{RTCGA-package}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.

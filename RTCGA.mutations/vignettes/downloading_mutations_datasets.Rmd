@@ -78,9 +78,9 @@ error = function(cond){
 ## Untarring downloaded files
 
 ```{r, eval=FALSE}
-list.files( "data2/") %>% 
+list.files( "data2/" ) %>% 
    paste0( "data2/", .) %>%
-   grep( "tar.gz", x = ., value=TRUE) %>%
+   grep( "tar.gz", x = ., value=TRUE ) %>%
    sapply( untar, exdir = "data2/" )
 ```
 ## Removing no longer needed tar.gz files
@@ -89,7 +89,7 @@ After datasets are untarred, the `tar.gz` files ar no longer needed and can be d
 ```{r, eval=FALSE}
 list.files( "data2/") %>% 
    paste0( "data2/", .) %>%
-   grep( pattern = "tar.gz", x = ., value = TRUE) %>%
+   grep( pattern = "tar.gz", x = ., value = TRUE ) %>%
    sapply( file.remove )
 
 ```
@@ -100,11 +100,20 @@ list.files( "data2/") %>%
 
 ```{r, eval=FALSE}
 #check this next time
-list.files("data2/") %>%
-   grep( x=., pattern ="mutations", value = TRUE) %>%
-   paste0("data2/", .) %>%
+list.files( "data2/" ) %>%
+   grep( x=., pattern ="Mutation", value = TRUE ) %>%
+   paste0( "data2/", .) %>%
    sapply( function(element){
       readTCGA(element,"mutations") -> mutations_file
+     
+     ## remove non-ASCII strings:
+     lapply(mutations_file, function(element){
+       if( unique(is.character(element)) ){
+         iconv(element, "UTF-8", "ASCII", sub="")
+       }}) -> mutations_file[]
+     
+     
+     
       assign( x = substr(element, start=7, stop=100),
                value = mutations_file,
               envir = .GlobalEnv )

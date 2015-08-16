@@ -5,6 +5,8 @@
 #' format is explained here \url{https://wiki.nci.nih.gov/display/TCGA/RNASeq+Version+2}. Package provides rnaseq datasets from The Cancer Genome Atlas Project for all cohorts types from \url{http://gdac.broadinstitute.org/}.
 #' Data were downloaded using \link{RTCGA-package}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}. 
 #' 
+#' @return Data frames with rnaseq data.
+#' 
 #' @format NULL
 #' @source \url{http://gdac.broadinstitute.org/}
 #' 
