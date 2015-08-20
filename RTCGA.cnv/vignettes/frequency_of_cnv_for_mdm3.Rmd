@@ -19,15 +19,8 @@ opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.b
 You need RTCGA.cnv package to use CNV scores.
 
 ```{r}
-if (!require(devtools)) {
-    install.packages("devtools")
-    require(devtools)
-}
-if (!require(RTCGA.cnv)) {
-    install.packages("devtools")
-    install_github("mi2-warsaw/RTCGA.data", subdir = "RTCGA.cnv")
-    require(RTCGA.cnv)
-}
+source("https://bioconductor.org/biocLite.R")
+biocLite("RTCGA.cnv")
 ```
 
 

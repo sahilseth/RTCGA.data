@@ -4,13 +4,14 @@
 #' Package provides cnv datasets from The Cancer Genome Atlas Project for all cohorts types from \url{http://gdac.broadinstitute.org/}.
 #' Data were downloaded using \link{RTCGA-package}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.
 #' 
+#' @import RTCGA
 #' @format NULL
 #' @source \url{http://gdac.broadinstitute.org/}
 #' 
 #' @name cnv
 #' @rdname cnv
 #' @aliases ACC.cnv,BLCA.cnv,BRCA.cnv,CESC.cnv,CHOL.cnv,COAD.cnv,COADREAD.cnv,DLBC.cnv,ESCA.cnv,GBM.cnv,GBMLGG.cnv,HNSC.cnv,KICH.cnv,KIPAN.cnv,KIRC.cnv,KIRP.cnv,LAML.cnv,LGG.cnv,LIHC.cnv,LUAD.cnv,LUSC.cnv,MESO.cnv,OV.cnv,PAAD.cnv,PCPG.cnv,PRAD.cnv,READ.cnv,SARC.cnv,SKCM.cnv,STAD.cnv,TGCT.cnv,THCA.cnv,THYM.cnv,UCEC.cnv,UCS.cnv,UVM.cnv
-#'
+#' 
 "ACC.cnv"
 #' @name cnv
 #' @rdname cnv
@@ -152,6 +153,3 @@
 #' @rdname cnv
 #' @format NULL
 "UVM.cnv"
-#' @name cnv
-#' @rdname cnv
-#' @format NULL
