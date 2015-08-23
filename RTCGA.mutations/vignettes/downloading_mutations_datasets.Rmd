@@ -31,7 +31,7 @@ if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
-install_github("MarcinKosinski/RTCGA")
+biocLite("MarcinKosinski/RTCGA")
 ```
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.

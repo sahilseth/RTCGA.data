@@ -3,17 +3,15 @@
 \docType{data}
 \name{rnaseq}
 \alias{ACC.rnaseq}
-\alias{ACC.rnaseq,BLCA.rnaseq,BRCA.rnaseq,CESC.rnaseq,CHOL.rnaseq,COAD.rnaseq,COADREAD.rnaseq,DLBC.rnaseq,ESCA.rnaseq,FPPP.rnaseq,GBM.rnaseq,GBMLGG.rnaseq,HNSC.rnaseq,KICH.rnaseq,KIPAN.rnaseq,KIRC.rnaseq,KIRP.rnaseq,LAML.rnaseq,LGG.rnaseq,LIHC.rnaseq,LUAD.rnaseq,LUSC.rnaseq,MESO.rnaseq,OV.rnaseq,PAAD.rnaseq,PCPG.rnaseq,PRAD.rnaseq,READ.rnaseq,SKCM.rnaseq,STAD.rnaseq,STES.rnaseq,TGCT.rnaseq,THCA.rnaseq,THYM.rnaseq,UCEC.rnaseq,UCS.rnaseq,UVM.rnaseq}
+\alias{ACC.rnaseq,BLCA.rnaseq,BRCA.rnaseq,CESC.rnaseq,CHOL.rnaseq,COAD.rnaseq,DLBC.rnaseq,ESCA.rnaseq,GBM.rnaseq,HNSC.rnaseq,KICH.rnaseq,KIPAN.rnaseq,KIRC.rnaseq,KIRP.rnaseq,LAML.rnaseq,LGG.rnaseq,LIHC.rnaseq,LUAD.rnaseq,LUSC.rnaseq,MESO.rnaseq,OV.rnaseq,PAAD.rnaseq,PCPG.rnaseq,PRAD.rnaseq,READ.rnaseq,SKCM.rnaseq,STES.rnaseq,TGCT.rnaseq,THCA.rnaseq,THYM.rnaseq,UCEC.rnaseq,UCS.rnaseq,UVM.rnaseq}
 \alias{BLCA.rnaseq}
 \alias{BRCA.rnaseq}
 \alias{CESC.rnaseq}
 \alias{CHOL.rnaseq}
 \alias{COAD.rnaseq}
-\alias{COADREAD.rnaseq}
 \alias{DLBC.rnaseq}
 \alias{ESCA.rnaseq}
 \alias{GBM.rnaseq}
-\alias{GBMLGG.rnaseq}
 \alias{HNSC.rnaseq}
 \alias{KICH.rnaseq}
 \alias{KIPAN.rnaseq}
@@ -56,15 +54,11 @@ CHOL.rnaseq
 
 COAD.rnaseq
 
-COADREAD.rnaseq
-
 DLBC.rnaseq
 
 ESCA.rnaseq
 
 GBM.rnaseq
-
-GBMLGG.rnaseq
 
 HNSC.rnaseq
 
@@ -120,7 +114,16 @@ Data frames with rnaseq data.
 \description{
 rnaseq data
 format is explained here \url{https://wiki.nci.nih.gov/display/TCGA/RNASeq+Version+2}. Package provides rnaseq datasets from The Cancer Genome Atlas Project for all cohorts types from \url{http://gdac.broadinstitute.org/}.
-Data were downloaded using \link{RTCGA-package}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.
+Data were downloaded using \link{RTCGA-package} and contain snapshots for the date: \code{2015-06-01}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.
+Use cases, examples and information about datasets in \pkg{RTCGA.data} family can be found here: \code{browseVignettes("RTCGA")}
+}
+\details{
+
+
+\code{browseVignettes("RTCGA")}
+}
+\examples{
+browseVignettes("RTCGA")
 }
 \keyword{datasets}
 
