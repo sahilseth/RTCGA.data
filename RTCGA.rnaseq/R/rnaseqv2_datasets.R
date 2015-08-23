@@ -14,7 +14,6 @@
 #' @source \url{http://gdac.broadinstitute.org/}
 #' 
 #' @examples browseVignettes("RTCGA")
-#' 
 #' @import RTCGA
 #' @name rnaseq
 #' @rdname rnaseq

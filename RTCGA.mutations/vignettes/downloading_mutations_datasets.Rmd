@@ -1,5 +1,6 @@
 ---
 title: "Using `RTCGA` package to download mutations data that are included in `RTCGA.mutations` package"
+subtitle: "Date of datasets release: 2015-06-01"
 author: "Marcin Kosiński"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -36,6 +37,12 @@ biocLite("MarcinKosinski/RTCGA")
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.
 
+Use cases and examples are shown in `RTCGA` packages vignettes:
+```{r, eval=FALSE}
+browseVignettes("RTCGA")
+```
+
+
 # How to download clinical data to gain the same datasets as in RTCGA.mutations package?
 
 There are many available date times of TCGA data releases. To see them all just type:
@@ -52,7 +59,7 @@ There were downloaded as follows (which is mainly copied from [http://marcinkosi
 All cohort names can be checked using:
 ```{r, eval=FALSE}
 (cohorts <- infoTCGA() %>% 
-   names() %>% 
+   rownames() %>% 
    sub("-counts", "", x=.))
 ```
 
@@ -60,14 +67,14 @@ For all cohorts the following code downloads the mutations data.
 
 ## Downloading tarred files
 ```{r, eval=FALSE}
-#dir.create( "data2" )
-date <- "2015-06-01"
+# dir.create( "data2" )
+releaseDate <- "2015-06-01"
 sapply( cohorts, function(element){
 tryCatch({
 downloadTCGA( cancerTypes = element, 
               dataSet = "Mutation_Packager_Calls.Level",
-              destDir = "data2/", 
-              date = date )},
+              destDir = "data2", 
+              date = releaseDate )},
 error = function(cond){
    cat("Error: Maybe there weren't mutations data for ", element, " cancer.\n")
 }
@@ -75,54 +82,36 @@ error = function(cond){
 })
 ```
 
-## Untarring downloaded files
-
-```{r, eval=FALSE}
-list.files( "data2/" ) %>% 
-   paste0( "data2/", .) %>%
-   grep( "tar.gz", x = ., value=TRUE ) %>%
-   sapply( untar, exdir = "data2/" )
-```
-## Removing no longer needed tar.gz files
-After datasets are untarred, the `tar.gz` files ar no longer needed and can be deleted.
-
-```{r, eval=FALSE}
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
-   grep( pattern = "tar.gz", x = ., value = TRUE ) %>%
-   sapply( file.remove )
-
-```
-
-
 # Saving mutations data to `RTCGA.mutations` package
 
 
 ```{r, eval=FALSE}
 #check this next time
-list.files( "data2/" ) %>%
+list.files( "data2" ) %>%
    grep( x=., pattern ="Mutation", value = TRUE ) %>%
-   paste0( "data2/", .) %>%
+   file.path( "data2", .) %>%
    sapply( function(element){
       readTCGA(element,"mutations") -> mutations_file
      
      ## remove non-ASCII strings:
-     lapply(mutations_file, function(element){
-       if( unique(is.character(element)) ){
-         iconv(element, "UTF-8", "ASCII", sub="")
-       }}) -> mutations_file[]
+     for( i in 1:ncol(mutations_file)){
+       mutations_file[, i] <- iconv(mutations_file[, i],
+                                    "UTF-8", "ASCII", sub="")
+     }
      
+     which( sapply(cohorts, grep, x = element) == 1 ) %>%
+       names -> cohort_name
      
-     
-      assign( x = substr(element, start=7, stop=100),
+     assign( x = paste0(cohort_name, ".mutations"),
                value = mutations_file,
               envir = .GlobalEnv )
 
-      save( list= substr(element, start=7, stop=100),
+     save( list = paste0(cohort_name, ".mutations"),
             file = paste0("data/",
-                     substr(element, start=7, stop=100),
-                     ".rda"))
-      rm(list = substr(element, start=7, stop=100), envir = .GlobalEnv)
+                     cohort_name,
+                     ".mutations.rda"))
+     rm( list = paste0(cohort_name, ".mutations"),
+         envir = .GlobalEnv )
    })
 ```
 

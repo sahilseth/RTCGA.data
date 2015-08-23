@@ -2,8 +2,11 @@
 #' Mutations datasets from TCGA project
 #'
 #' Package provides mutations datasets from The Cancer Genome Atlas Project for all cohorts types from \url{http://gdac.broadinstitute.org/}.
-#' Data were downloaded using \link{RTCGA-package}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.
+#' Data were downloaded using \link{RTCGA-package} and contain snapshots for the date: \code{2015-06-01}. The process is described here: \url{http://mi2-warsaw.github.io/RTCGA.data/}.
+#' Use cases, examples and information about datasets in \pkg{RTCGA.data} family can be found here: \code{browseVignettes("RTCGA")}
 #' Mutations data format is explained here https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+(MAF)+Specification. There is extra one column with patients' barcodes.
+#' 
+#' @details \code{browseVignettes("RTCGA")}
 #' 
 #' @return Data frames with mutations data.
 #' 
