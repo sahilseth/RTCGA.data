@@ -31,10 +31,15 @@ if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
-install_github("MarcinKosinski/RTCGA")
+biocLite("MarcinKosinski/RTCGA")
 ```
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.
+
+Use cases and examples are shown in `RTCGA` packages vignettes:
+```{r, eval=FALSE}
+browseVignettes("RTCGA")
+```
 
 # How to download clinical data to gain the same datasets as in RTCGA.clinical package?
 
@@ -52,7 +57,7 @@ There were downloaded as follows (which is mainly copied from [http://marcinkosi
 All cohort names can be checked using:
 ```{r, eval=FALSE}
 (cohorts <- infoTCGA() %>% 
-   names() %>% 
+   rownames() %>% 
    sub("-counts", "", x=.))
 ```
 
@@ -61,26 +66,8 @@ For all cohorts the following code downloads the clinical data.
 ## Downloading tarred files
 ```{r, eval=FALSE}
 #dir.create( "data2" )
-date <- "2015-06-01"
-downloadTCGA( cancerTypes = cohorts, destDir = "data2/", date = date )
-```
-
-## Untarring downloaded files
-
-```{r, eval=FALSE}
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
-   sapply( untar, exdir = "data2/" )
-```
-## Removing no longer needed tar.gz files
-After datasets are untarred, the `tar.gz` files ar no longer needed and can be deleted.
-
-```{r, eval=FALSE}
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
-   grep( pattern = "tar.gz", x = ., value = TRUE) %>%
-   sapply( file.remove )
-
+releaseDate <- "2015-06-01"
+downloadTCGA( cancerTypes = cohorts, destDir = "data2", date = releaseDate )
 ```
 
 ## Reading downloaded clinical dataset
@@ -96,17 +83,24 @@ sapply( cohorts, function( element ){
 }) 
 ```
 
-### Reading clinical data using `read.clinical`
+### Reading clinical data using `readTCGA`
 
-Because of that clinical data are transposed in downloaded files, there have been prepared special function `read.clinical` to read and transpose data automatically. Code is below
+Because of the fact that clinical data are transposed in downloaded files, there have been prepared special function `readTCGA` to read and transpose data automatically. Code is below
 
 
 ```{r, eval=FALSE}
 sapply( cohorts, function(element){
    tryCatch({
-    assign( value = readTCGA(get(paste0(element,".clin.path"),
-                                      envir = .GlobalEnv),
-                             "clinical"),
+     readTCGA(get(paste0(element,".clin.path"),
+                          envir = .GlobalEnv),
+                 "clinical") -> clinical_file
+     
+     ## remove non-ASCII strings:
+     for( i in 1:ncol(clinical_file)){
+       clinical_file[, i] <- iconv(clinical_file[, i],
+                                    "UTF-8", "ASCII", sub="")
+     }   
+   assign( value = clinical_file,
             x = paste0(element, ".clinical"),
             envir = .GlobalEnv )
     },
@@ -123,6 +117,6 @@ sapply( cohorts, function(element){
 grep( "clinical", ls(), value = TRUE) %>%
    cat( sep="," ) #can one to id better? as from use_data documentation:
    # ...	Unquoted names of existing objects to save
-   devtools::use_data(ACC.clinical,BLCA.clinical,BRCA.clinical,CESC.clinical,CHOL.clinical,COAD.clinical,COADREAD.clinical,DLBC.clinical,ESCA.clinical,FPPP.clinical,GBM.clinical,GBMLGG.clinical,HNSC.clinical,KICH.clinical,KIPAN.clinical,KIRC.clinical,KIRP.clinical,LAML.clinical,LGG.clinical,LIHC.clinical,LUAD.clinical,LUSC.clinical,MESO.clinical,OV.clinical,PAAD.clinical,PCPG.clinical,READ.clinical,SKCM.clinical,STAD.clinical,STES.clinical,TGCT.clinical,THCA.clinical,THYM.clinical,UCEC.clinical,UCS.clinical,UVM.clinical)
+   devtools::use_data(ACC.clinical,BLCA.clinical,BRCA.clinical,CESC.clinical,CHOL.clinical,COAD.clinical,COADREAD.clinical,DLBC.clinical,ESCA.clinical,FPPP.clinical,GBM.clinical,GBMLGG.clinical,HNSC.clinical,KICH.clinical,KIPAN.clinical,KIRC.clinical,KIRP.clinical,LAML.clinical,LGG.clinical,LIHC.clinical,LUAD.clinical,LUSC.clinical,MESO.clinical,OV.clinical,PAAD.clinical,PCPG.clinical,READ.clinical,SKCM.clinical,STAD.clinical,STES.clinical,TGCT.clinical,THCA.clinical,THYM.clinical,UCEC.clinical,UCS.clinical,UVM.clinical, overwrite = TRUE)
 ```
 
