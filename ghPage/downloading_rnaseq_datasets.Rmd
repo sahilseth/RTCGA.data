@@ -1,24 +1,18 @@
 ---
 title: "Using `RTCGA` package to download rna-seq data that are included in `RTCGA.rnaseq` package"
+subtitle: "Date of datasets release: 2015-06-01"
 author: "Marcin Kosiński"
 date: "`r Sys.Date()`"
-output: 
-   html_document:
-      fig_width: 17
-      fig_height: 10
-      toc: true
-      toc_depth: 3
-      theme: readable
-      highlight: pygments
-      keep_md: true
-      includes:
-         in_header: include/in_header.html
-         before_body: include/before_body.html
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using RTCGA to download rna-seq data as included in RTCGA.data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, echo=FALSE}
 library(knitr)
-opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), cache=TRUE, eval = FALSE)
+opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), eval = FALSE)
 ```
 
 # RTCGA package
@@ -33,20 +27,26 @@ biocLite("RTCGA")
 ```
 
 or from github
-```{r}
+```{r, eval=FALSE}
 if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
-install_github("MarcinKosinski/RTCGA")
+biocLite("MarcinKosinski/RTCGA")
 ```
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.
 
+Use cases and examples are shown in `RTCGA` packages vignettes:
+```{r, eval=FALSE}
+browseVignettes("RTCGA")
+```
+
+
 # How to download rna-seq data to gain the same datasets as in RTCGA.rnaseq package?
 
 There are many available date times of TCGA data releases. To see them all just type:
-```{r}
+```{r, eval=FALSE}
 library(RTCGA)
 checkTCGA('Dates')
 ```
@@ -57,24 +57,24 @@ There were downloaded as follows:
 ## Available cohorts
 
 All cohort names can be checked using:
-```{r}
+```{r, eval=FALSE}
 (cohorts <- infoTCGA() %>% 
-   names() %>% 
+   rownames() %>% 
    sub("-counts", "", x=.))
 ```
 
 For all cohorts the following code downloads the rna-seq data.
 
 ## Downloading tarred files
-```{r}
-#dir.create( "data2" )
-date <- "2015-06-01"
+```{r, eval=FALSE}
+# dir.create( "data2" )
+releaseDate <- "2015-06-01"
 sapply( cohorts, function(element){
 tryCatch({
 downloadTCGA( cancerTypes = element, 
               dataSet = "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level",
               destDir = "data2/", 
-              date = date )},
+              date = releaseDate )},
 error = function(cond){
    cat("Error: Maybe there weren't rnaseq data for ", element, " cancer.\n")
 }
@@ -82,32 +82,13 @@ error = function(cond){
 })
 ```
 
-## Untarring downloaded files
-
-```{r}
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
-   grep( "tar.gz", x = ., value=TRUE) %>%
-   sapply( untar, exdir = "data2/" )
-```
-## Removing no longer needed tar.gz files
-After datasets are untarred, the `tar.gz` files ar no longer needed and can be deleted.
-
-```{r}
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
-   grep( pattern = "tar.gz", x = ., value = TRUE) %>%
-   sapply( file.remove )
-
-```
-
 ## Reading downloaded rna-seq datasets
 
 ### Shortening paths and directories 
 
-```{r}
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
+```{r, eval=FALSE}
+list.files( "data2") %>% 
+   file.path( "data2", .) %>%
    file.rename( to = substr(.,start=1,stop=50))
 ```
 
@@ -115,13 +96,13 @@ list.files( "data2/") %>%
 ### Paths to rna-seq data
 Below is the code that automatically gives the path to `*rnaseqv2*` files for all cohorts types downloaded to `data2` folder.
 
-```{r}
+```{r, eval=FALSE}
 sapply( cohorts, function( element ){
    folder <- grep( paste0( "(_",element,"\\.", "|","_",element,"-FFPE)", ".*rnaseqv2"), 
-                   list.files("data2/"),value = TRUE)
-   file <- grep( paste0(element, ".*rnaseqv2"), list.files( paste0( "data2/",folder ) ),
+                   list.files("data2"),value = TRUE)
+   file <- grep( paste0(element, ".*rnaseqv2"), list.files( file.path( "data2",folder ) ),
                  value = TRUE)
-   path <- paste0( "data2/", folder, "/", file )
+   path <- file.path( "data2", folder, file )
    assign( value = path, x = paste0(element, ".rnaseq.path"), envir = .GlobalEnv)
 }) 
 ```
@@ -131,7 +112,7 @@ sapply( cohorts, function( element ){
 Code is below
 
 
-```{r}
+```{r, eval=FALSE}
 sapply( cohorts, function(element){
    tryCatch({
     assign( value = readTCGA(get(paste0(element,".rnaseq.path"),
@@ -151,7 +132,7 @@ sapply( cohorts, function(element){
 # Saving rna-seq data to `RTCGA.rnaseq` package
 
 
-```{r}
+```{r, eval=FALSE}
 grep( "rnaseq", ls(), value = TRUE)[ -c(grep("path", grep( "rnaseq", ls(), value = TRUE)))] %>%
    cat( sep="," ) #can one to id better? as from use_data documentation:
    # ...	Unquoted names of existing objects to save
