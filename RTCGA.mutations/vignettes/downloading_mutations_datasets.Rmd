@@ -113,5 +113,9 @@ list.files( "data2" ) %>%
      rm( list = paste0(cohort_name, ".mutations"),
          envir = .GlobalEnv )
    })
+
+
+# or save with good compression
+devtools::use_data(ACC.mutations,BLCA.mutations,BRCA.mutations,CESC.mutations,CHOL.mutations,COAD.mutations,GBM.mutations,HNSC.mutations,KICH.mutations,KIPAN.mutations,KIRC.mutations,KIRP.mutations,LAML.mutations,LGG.mutations,LIHC.mutations,LUAD.mutations,LUSC.mutations,OV.mutations,PAAD.mutations,PCPG.mutations,PRAD.mutations,READ.mutations,SARC.mutations,SKCM.mutations,STAD.mutations,STES.mutations,TGCT.mutations,THCA.mutations,UCEC.mutations,UCS.mutations,UVM.mutations, overwrite = TRUE, compress = "xz")
 ```
 
