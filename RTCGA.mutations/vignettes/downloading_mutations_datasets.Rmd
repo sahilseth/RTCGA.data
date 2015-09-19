@@ -65,7 +65,7 @@ All cohort names can be checked using:
 
 For all cohorts the following code downloads the mutations data.
 
-## Downloading tarred files
+## Downloading files
 ```{r, eval=FALSE}
 # dir.create( "data2" )
 releaseDate <- "2015-06-01"

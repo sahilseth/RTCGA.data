@@ -1,5 +1,6 @@
 ---
 title: "Using `RTCGA` package to download clinical data that are included in `RTCGA.clinical` package"
+subtitle: "Date of datasets release: 2015-06-01"
 author: "Marcin Kosiński"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -63,7 +64,7 @@ All cohort names can be checked using:
 
 For all cohorts the following code downloads the clinical data.
 
-## Downloading tarred files
+## Downloading files
 ```{r, eval=FALSE}
 #dir.create( "data2" )
 releaseDate <- "2015-06-01"

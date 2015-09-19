@@ -23,10 +23,17 @@ if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
-install_github("MarcinKosinski/RTCGA")
+biocLite("MarcinKosinski/RTCGA")
 ```
 
 Furthermore, `RTCGA` package transforms TCGA data to form which is convenient to use in R statistical package. Those data transformations can be a part of statistical analysis pipeline which can be more reproducible with `RTCGA`.
+
+Use cases and examples are shown in `RTCGA` packages vignettes:
+
+```r
+browseVignettes("RTCGA")
+```
+
 
 # How to download rna-seq data to gain the same datasets as in RTCGA.rnaseq package?
 
@@ -46,48 +53,28 @@ All cohort names can be checked using:
 
 ```r
 (cohorts <- infoTCGA() %>% 
-   names() %>% 
+   rownames() %>% 
    sub("-counts", "", x=.))
 ```
 
 For all cohorts the following code downloads the rna-seq data.
 
-## Downloading tarred files
+## Downloading files
 
 ```r
-#dir.create( "data2" )
-date <- "2015-06-01"
+# dir.create( "data2" )
+releaseDate <- "2015-06-01"
 sapply( cohorts, function(element){
 tryCatch({
 downloadTCGA( cancerTypes = element, 
               dataSet = "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level",
               destDir = "data2/", 
-              date = date )},
+              date = releaseDate )},
 error = function(cond){
    cat("Error: Maybe there weren't rnaseq data for ", element, " cancer.\n")
 }
 )
 })
-```
-
-## Untarring downloaded files
-
-
-```r
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
-   grep( "tar.gz", x = ., value=TRUE) %>%
-   sapply( untar, exdir = "data2/" )
-```
-## Removing no longer needed tar.gz files
-After datasets are untarred, the `tar.gz` files ar no longer needed and can be deleted.
-
-
-```r
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
-   grep( pattern = "tar.gz", x = ., value = TRUE) %>%
-   sapply( file.remove )
 ```
 
 ## Reading downloaded rna-seq datasets
@@ -96,8 +83,8 @@ list.files( "data2/") %>%
 
 
 ```r
-list.files( "data2/") %>% 
-   paste0( "data2/", .) %>%
+list.files( "data2") %>% 
+   file.path( "data2", .) %>%
    file.rename( to = substr(.,start=1,stop=50))
 ```
 
@@ -109,10 +96,10 @@ Below is the code that automatically gives the path to `*rnaseqv2*` files for al
 ```r
 sapply( cohorts, function( element ){
    folder <- grep( paste0( "(_",element,"\\.", "|","_",element,"-FFPE)", ".*rnaseqv2"), 
-                   list.files("data2/"),value = TRUE)
-   file <- grep( paste0(element, ".*rnaseqv2"), list.files( paste0( "data2/",folder ) ),
+                   list.files("data2"),value = TRUE)
+   file <- grep( paste0(element, ".*rnaseqv2"), list.files( file.path( "data2",folder ) ),
                  value = TRUE)
-   path <- paste0( "data2/", folder, "/", file )
+   path <- file.path( "data2", folder, file )
    assign( value = path, x = paste0(element, ".rnaseq.path"), envir = .GlobalEnv)
 }) 
 ```
