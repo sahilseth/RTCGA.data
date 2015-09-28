@@ -289,9 +289,13 @@ dev.off()
 
 ## The Pan-cancer analyses of MDM2 mutations for the CNV (copy-number-variation) data
 
-With CNV data set one can compare frequency of DNA alterations cancers. The CNV data is stored in non-standard format. For each patient, for each chromosome sequence is split into a different number of segments, and each segment has score that correspond to the multiplication factor. This dataset has to be firs converted to more standard format, with information about multiplication for given gene, and then it is possible to compare changes of CNV across clinical cohorts.
+> Copy-number variations (CNVs)—a form of structural variation—are alterations of the DNA of a genome that results in the cell having an abnormal or, for certain genes, a normal variation in the number of copies of one or more sections of the DNA. CNVs correspond to relatively large regions of the genome that have been deleted (fewer than the normal number) or duplicated (more than the normal number) on certain chromosomes.
 
-In the example below we compare of variation of number of copies of MDM2 gene, which is located on the chromosome 12, positions 69240000-69200000. First we extract data for given gene and then we plot distributions for different tumors. It turns out that in some tumors there are patients with very high number of multiplications of this gene. 
+With access to CNV data one can compare frequency of DNA alterations for different cancers. The CNV data is stored in a non-standard format. For each patient, for each chromosome the sequence is split into a different number of segments, and each segment has score that correspond to the multiplication factor. Such dataset has to be first converted to a more standard format, with information about multiplication for given gene, and then it is possible to compare changes of CNV across clinical cohorts / cancers.
+
+In the example below we compare the variation of number of copies for the MDM2 gene, which is located on the chromosome 12, positions 69240000-69200000. First we extract data for the given gene and then we plot distributions of CNV for different tumors (single observation is a single patient). 
+
+As you can see in the figure below, it turns out that in some tumors there are patients with very high number of multiplications of this gene. 
 
 
 ```{r}
