@@ -306,15 +306,28 @@ MDM2.scores <- MDM2.scores[!duplicated(MDM2.scores$Sample),]
 MDM2.scores$cohort <- gsub(MDM2.scores$cohort, pattern=".cnv", replacement = "")
 
 # sort along average CNV
-MDM2.scores$cohort <- reorder(MDM2.scores$Segment_Mean, MDM2.scores$cohort, mean, na.rm=TRUE)
+MDM2.scores$cohort <- reorder(MDM2.scores$cohort, MDM2.scores$Segment_Mean, median, na.rm=TRUE)
 
 # plotit 
 library(ggplot2)
 ggplot() + 
-  geom_boxplot(data=MDM2.scores, aes(y=Segment_Mean, x=cohort, fill=cohort)) +
-  coord_flip() + theme(legend.position="none")
+  geom_boxplot(data=MDM2.scores, aes(y=2*2^Segment_Mean, x=cohort, fill=cohort)) +
+  coord_flip() + theme_bw() + theme(legend.position="none") + ylab("Average number of CNV copies for MDM2 gene") + scale_y_continuous(trans="log2") + xlab("") 
 
 ```
+
+```{r, echo=FALSE, results='hide'}
+pdf(file = "cnv.pdf")
+ggplot() + 
+  geom_boxplot(data=MDM2.scores, aes(y=2*2^Segment_Mean, x=cohort, fill=cohort)) +
+  coord_flip() + theme_bw() + theme(legend.position="none") + ylab("Average number of CNV copies for MDM2 gene") + scale_y_continuous(trans="log2") + xlab("") 
+dev.off()
+```
+
+\begin{figure}[h!]
+\includegraphics[width=12cm]{cnv.pdf}
+\caption{\label{biplot2}The boxplot for 31 cancer types with CNV copies of MDM2 gene.}
+\end{figure}
 
 \newpage
 
