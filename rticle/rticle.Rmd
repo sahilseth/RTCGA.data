@@ -287,6 +287,37 @@ dev.off()
 
 \newpage
 
+## The Pan-cancer analyses of MDM2 mutations for the CNV (copy-number-variation) data
+
+With th use of CNV data one can compare frequency of alterations of chromosome with given gene across cancers. Since CNV data presents large changes in the genome on the DNA level it is interesting to compare these changes with expression or clinical outcomes.
+
+Here we will compare of multiplivations of MDM2 gene, which is located on the chromosome 12, positions 69240000-69200000.
+
+```{r}
+library(RTCGA.cnv)
+# find all fragments that overlaps with MDM2
+MDM2.scores <- get.region.cnv.score(chr="12", start=69240000, stop=69200000)
+# only samples from primary tumor
+MDM2.scores <- MDM2.scores[grepl(MDM2.scores$Sample, pattern = "-01A-"),]
+
+# remove duplicates
+MDM2.scores$Sample <- substr(MDM2.scores$Sample, 1, 12)
+MDM2.scores <- MDM2.scores[!duplicated(MDM2.scores$Sample),]
+MDM2.scores$cohort <- gsub(MDM2.scores$cohort, pattern=".cnv", replacement = "")
+
+# sort along average CNV
+MDM2.scores$cohort <- reorder(MDM2.scores$Segment_Mean, MDM2.scores$cohort, mean, na.rm=TRUE)
+
+# plotit 
+library(ggplot2)
+ggplot() + 
+  geom_boxplot(data=MDM2.scores, aes(y=Segment_Mean, x=cohort, fill=cohort)) +
+  coord_flip() + theme(legend.position="none")
+
+```
+
+\newpage
+
 ## The Principal Components Analysis for the rnaseq data
 
 One can also perform a Principal Components Analysis, after binding rnaseq data for few random cancer types like below. It can be seen that genes' expressions amongs those cancers vary and samples group in view of cancer type.

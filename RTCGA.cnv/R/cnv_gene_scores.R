@@ -24,7 +24,7 @@ get.region.cnv.score <- function(chr="12", start=69240000, stop=69200000) {
   filtered <- lapply(datasets, function(dataname) {
     tmp <- get(dataname)
     tmp <- tmp[tmp$Chromosome == chr,]
-    tmp <- tmp[tmp$Start <= stop & tmp$End >= start,]
+    tmp <- tmp[pmin(tmp$Start, tmp$End) <= pmax(stop, start) & pmax(tmp$Start, tmp$End) >= pmin(stop, start),]
     data.frame(tmp, cohort=dataname)
   })
   
