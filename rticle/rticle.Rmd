@@ -289,9 +289,10 @@ dev.off()
 
 ## The Pan-cancer analyses of MDM2 mutations for the CNV (copy-number-variation) data
 
-With th use of CNV data one can compare frequency of alterations of chromosome with given gene across cancers. Since CNV data presents large changes in the genome on the DNA level it is interesting to compare these changes with expression or clinical outcomes.
+With CNV data set one can compare frequency of DNA alterations cancers. The CNV data is stored in non-standard format. For each patient, for each chromosome sequence is split into a different number of segments, and each segment has score that correspond to the multiplication factor. This dataset has to be firs converted to more standard format, with information about multiplication for given gene, and then it is possible to compare changes of CNV across clinical cohorts.
 
-Here we will compare of multiplivations of MDM2 gene, which is located on the chromosome 12, positions 69240000-69200000.
+In the example below we compare of variation of number of copies of MDM2 gene, which is located on the chromosome 12, positions 69240000-69200000. First we extract data for given gene and then we plot distributions for different tumors. It turns out that in some tumors there are patients with very high number of multiplications of this gene. 
+
 
 ```{r}
 library(RTCGA.cnv)
