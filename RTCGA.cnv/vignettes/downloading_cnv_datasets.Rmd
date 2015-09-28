@@ -70,7 +70,7 @@ For all cohorts the following code downloads the cnv data.
 #dir.create( "data/cnv2" )
 releaseDate <- "2015-08-21"
 for (cohort in cohorts) {
-  try(downloadTCGA( cancerTypes = cohort, destDir = "data/cnv2", date = releaseDate, dataSet = "Merge_snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg19__seg.Level_3" ),
+  try(downloadTCGA( cancerTypes = cohort, destDir = "data/cnv2", date = releaseDate, dataSet = paste0(cohort,".Merge_snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg19__seg.Level_3" )),
       silent=TRUE)
 }
 ```
