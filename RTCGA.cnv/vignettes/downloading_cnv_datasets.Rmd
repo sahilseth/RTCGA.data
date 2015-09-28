@@ -77,51 +77,21 @@ for (cohort in cohorts) {
 
 ## Reading downloaded cnv dataset
 
-### Paths to clinical data
-Below is the code that automatically gives the path to `*.clinical.merged.txt` files for all cohorts types downloaded to `data2` folder.
+Datasets from the folder `data/cnv2` are imported and transformed into rda files.
 
 ```{r, eval=FALSE}
-sapply( cohorts, function( element ){
-   folder <- grep( paste0( "(_",element,"\\.", "|","_",element,"-FFPE)", ".*Clinical"), list.files("data2/"),value = TRUE)
-   path <- paste0( "data2/", folder, "/", element, ".clin.merged.txt")
-   assign( value = path, x = paste0(element, ".clin.path"), envir = .GlobalEnv)
-}) 
+allCNVFiles <- list.files("data/cnv2", pattern = "cnv", recursive = TRUE, full.names = TRUE)
+for (cnvFile in allCNVFiles) {
+    cnv <- read.table(cnvFile,h=T) 
+    cohortName <- gsub(gsub(cnvFile, pattern = "^[^A-Z]*", replacement = ""), pattern="[\\.-].*", replacement="")
+    name = paste0(cohortName, ".cnv")
+    assign(name, cnv)
+    save(list = name, file=paste0("data/cnv2/", name, ".rda"), compression_level = 9, compress = "xz")
+
+}
+
 ```
 
-### Reading clinical data using `readTCGA`
+# Saving cnv data to `RTCGA.cnv` package
 
-Because of the fact that clinical data are transposed in downloaded files, there have been prepared special function `readTCGA` to read and transpose data automatically. Code is below
-
-
-```{r, eval=FALSE}
-sapply( cohorts, function(element){
-   tryCatch({
-     readTCGA(get(paste0(element,".clin.path"),
-                          envir = .GlobalEnv),
-                 "clinical") -> clinical_file
-     
-     ## remove non-ASCII strings:
-     for( i in 1:ncol(clinical_file)){
-       clinical_file[, i] <- iconv(clinical_file[, i],
-                                    "UTF-8", "ASCII", sub="")
-     }   
-   assign( value = clinical_file,
-            x = paste0(element, ".clinical"),
-            envir = .GlobalEnv )
-    },
-   error=function(cond){
-   cat("Error: Maybe there weren't clinical data for ", element, " cancer.\n")
-})
-})
-```
-
-# Saving clinical data to `RTCGA.clinical` package
-
-
-```{r, eval=FALSE}
-grep( "clinical", ls(), value = TRUE) %>%
-   cat( sep="," ) #can one to id better? as from use_data documentation:
-   # ...	Unquoted names of existing objects to save
-   devtools::use_data(ACC.clinical,BLCA.clinical,BRCA.clinical,CESC.clinical,CHOL.clinical,COAD.clinical,COADREAD.clinical,DLBC.clinical,ESCA.clinical,FPPP.clinical,GBM.clinical,GBMLGG.clinical,HNSC.clinical,KICH.clinical,KIPAN.clinical,KIRC.clinical,KIRP.clinical,LAML.clinical,LGG.clinical,LIHC.clinical,LUAD.clinical,LUSC.clinical,MESO.clinical,OV.clinical,PAAD.clinical,PCPG.clinical,READ.clinical,SKCM.clinical,STAD.clinical,STES.clinical,TGCT.clinical,THCA.clinical,THYM.clinical,UCEC.clinical,UCS.clinical,UVM.clinical, overwrite = TRUE)
-```
-
+Now you should copy all rda files into the RTCGA.cnv package data directory.
