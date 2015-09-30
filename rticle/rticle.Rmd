@@ -211,29 +211,35 @@ library(RTCGA.tools)
 library(survival)
 library(survMisc)
 
-LUAD.clinical %>%
-   mutate(
-      patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0),
-      barcode = patient.bcr_patient_barcode %>% as.character(),
-      times = ifelse( !is.na(patient.days_to_last_followup),
-                 patient.days_to_last_followup %>% as.character() %>% as.numeric(),
-                 patient.days_to_death %>% as.character() %>% as.numeric() ),
-      stage = RTCGA.tools::mergeStages(LUAD.clinical$patient.stage_event.pathologic_stage)
-   ) %>%
-   rename(
-      therapy = patient.drugs.drug.therapy_types.therapy_type
-   ) %>%
-   filter( !is.na(times) ) -> LUAD.clinical.selected 
+RTCGA.tools::clinicalStageBiplot(LUAD.clinical, xlims = c(0,2000))
 
-LUAD.clinical.selected %>%
-   survfit( Surv(times, patient.vital_status) ~ stage, data = .) %>%
-   survMisc:::autoplot.survfit( titleSize=12, type="CI" ) %>%
-   .[[2]] -> km_plot_luad
+# LUAD.clinical %>%
+#    mutate(
+#       patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0),
+#       barcode = patient.bcr_patient_barcode %>% as.character(),
+#       times = ifelse( !is.na(patient.days_to_last_followup),
+#                  patient.days_to_last_followup %>% as.character() %>% as.numeric(),
+#                  patient.days_to_death %>% as.character() %>% as.numeric() ),
+#       stage = stri_extract_all_regex(LUAD.clinical$patient.stage_event.pathologic_stage,
+#                                      pattern = "i|v") %>%
+#          lapply(stri_flatten) %>%
+#          unlist
+#    ) %>%
+#    rename(
+#       therapy = patient.drugs.drug.therapy_types.therapy_type
+#    ) %>%
+#    filter( !is.na(times) ) -> LUAD.clinical.selected 
+# 
+# LUAD.clinical.selected %>%
+#    survfit( Surv(times, patient.vital_status) ~ stage, data = .) %>%
+#    survMisc:::autoplot.survfit( titleSize=12, type="CI" ) -> km_plot
+# %>%
+#    .[[2]] -> km_plot_luad
 ```
 
 ```{r, echo = FALSE}
 pdf(file = "km_plot_luad.pdf")
-km_plot_luad
+RTCGA.tools::clinicalStageBiplot(LUAD.clinical, xlims = c(0,2000))
 dev.off()
 ```
 
