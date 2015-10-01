@@ -194,7 +194,7 @@ data(cohort.package)
 
 where `cohort` corresponds to a specific Cohort of patients and `package` corresponds to the one of four packages from \pkg{RTCGA.data} family. 
 
-
+# Few words about RTCGA.tools
 
 \newpage
 
@@ -213,33 +213,11 @@ library(survMisc)
 
 RTCGA.tools::clinicalStageSurvival(LUAD.clinical, xlims = c(0,2000))
 
-# LUAD.clinical %>%
-#    mutate(
-#       patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0),
-#       barcode = patient.bcr_patient_barcode %>% as.character(),
-#       times = ifelse( !is.na(patient.days_to_last_followup),
-#                  patient.days_to_last_followup %>% as.character() %>% as.numeric(),
-#                  patient.days_to_death %>% as.character() %>% as.numeric() ),
-#       stage = stri_extract_all_regex(LUAD.clinical$patient.stage_event.pathologic_stage,
-#                                      pattern = "i|v") %>%
-#          lapply(stri_flatten) %>%
-#          unlist
-#    ) %>%
-#    rename(
-#       therapy = patient.drugs.drug.therapy_types.therapy_type
-#    ) %>%
-#    filter( !is.na(times) ) -> LUAD.clinical.selected 
-# 
-# LUAD.clinical.selected %>%
-#    survfit( Surv(times, patient.vital_status) ~ stage, data = .) %>%
-#    survMisc:::autoplot.survfit( titleSize=12, type="CI" ) -> km_plot
-# %>%
-#    .[[2]] -> km_plot_luad
 ```
 
 ```{r, echo = FALSE}
 pdf(file = "km_plot_luad.pdf")
-RTCGA.tools::clinicalStageBiplot(LUAD.clinical, xlims = c(0,2000))
+RTCGA.tools::clinicalStageSurvival(LUAD.clinical, xlims = c(0,2000))
 dev.off()
 ```
 
@@ -259,6 +237,22 @@ In a simple way one can use previously selected data to merge them with genes' m
 ```{r, eval=TRUE, cache=TRUE, warning=FALSE}
 library(RTCGA.mutations)
 library(ggthemes)
+LUAD.clinical %>%
+   mutate(
+      patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0),
+      barcode = patient.bcr_patient_barcode %>% as.character(),
+      times = ifelse( !is.na(patient.days_to_last_followup),
+                 patient.days_to_last_followup %>% as.character() %>% as.numeric(),
+                 patient.days_to_death %>% as.character() %>% as.numeric() ),
+      stage = stri_extract_all_regex(LUAD.clinical$patient.stage_event.pathologic_stage,
+                                     pattern = "i|v") %>%
+         lapply(stri_flatten) %>%
+         unlist
+   ) %>%
+   rename(
+      therapy = patient.drugs.drug.therapy_types.therapy_type
+   ) %>%
+   filter( !is.na(times) ) -> LUAD.clinical.selected 
 LUAD.clinical.selected %>%
       left_join( y = LUAD.mutations %>%
                     filter( Hugo_Symbol == "TP53") %>%
@@ -344,35 +338,18 @@ dev.off()
 
 ## The Principal Components Analysis for the rnaseq data
 
-One can also perform a Principal Components Analysis, after binding rnaseq data for few random cancer types like below. It can be seen that genes' expressions amongs those cancers vary and samples group in view of cancer type.
+One can also perform a Principal Components Analysis, after binding rnaseq data for few random cancer types like below. It can be seen that genes' expressions amongs those cancers (*Adrenocortical carcinoma, Cholangiocarcinoma, Glioma, Pheochromocytoma + Paraganglioma and Uveal Melanoma*) vary and samples group in view of cancer type.
 
 ```{r}
-rbind(ACC.rnaseq, CHOL.rnaseq, GBM.rnaseq, PCPG.rnaseq, UVM.rnaseq) -> rnaseq_sample
-# which columns contain only zeros
-rnaseq_sample[,-1] %>% colSums() -> rnaseq_col_sums
-which(rnaseq_col_sums == 0) -> columns_with_only0
-# pca
-rnaseq_sample[, -c(1,columns_with_only0+1)] %>%
-   prcomp( scale = TRUE ) -> PCA
-# labels for pca
-lapply(list(ACC.rnaseq, CHOL.rnaseq, GBM.rnaseq, PCPG.rnaseq, UVM.rnaseq), nrow) -> rnaseq_nrow
-mapply(rep, 
-       c("ACC.rnaseq", "CHOL.rnaseq", "GBM.rnaseq", "PCPG.rnaseq", "UVM.rnaseq"), 
-       rnaseq_nrow) %>%
-   unlist -> rnaseq_pca_labels
-# biplot
-#library(devtools);install_github("vqv/ggbiplot")
-library(ggbiplot)
-rownames(PCA$rotation) <- 1:nrow(PCA$rotation)
-ggbiplot(PCA, obs.scale = 1, var.scale = 1,
-  groups = rnaseq_pca_labels, ellipse = TRUE, circle = TRUE, var.axes=FALSE) +
-  theme(legend.direction = 'horizontal', legend.position = 'top') -> biplot_rnaseq
+library(RTCGA.rnaseq)
+
+rnaseqBiplot(cohorts = c("ACC", "CHOL", "GBM", "PCPG", "UVM"))
 
 ```
 
 ```{r, echo=FALSE, results='hide'}
 pdf(file = "biplot_rnaseq.pdf")
-biplot_rnaseq
+rnaseqBiplot(cohorts = c("ACC", "CHOL", "GBM", "PCPG", "UVM"))
 dev.off()
 ```
 
