@@ -211,7 +211,7 @@ library(RTCGA.tools)
 library(survival)
 library(survMisc)
 
-RTCGA.tools::clinicalStageBiplot(LUAD.clinical, xlims = c(0,2000))
+RTCGA.tools::clinicalStageSurvival(LUAD.clinical, xlims = c(0,2000))
 
 # LUAD.clinical %>%
 #    mutate(
