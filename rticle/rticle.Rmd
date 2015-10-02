@@ -232,6 +232,8 @@ dev.off()
 
 ## The Cox proportional hazards model with the genes' mutations data
 
+## MUTATIONS EXAMPLE : mutationSBoxplotexpression(c("BRCA", "HNSC", "LUSC", "PRAD", "STES"), "TP53", "ETF1")
+
 In a simple way one can use previously selected data to merge them with genes' mutations data and to compute Cox proportional hazards model [9]. Moreover, the goodness of fit can be checked with the plot of Martingale Residuals - Figure \ref{figRes}.
 
 ```{r, eval=TRUE, cache=TRUE, warning=FALSE}
