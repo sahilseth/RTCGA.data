@@ -73,7 +73,7 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("RTCGA.clinical") 
 biocLite("RTCGA.rnaseq") 
 biocLite("RTCGA.mutations") 
-biocLite("RTCGA.cnv") 
+biocLite("RTCGA.cnv") # or developers version biocLite("mi2-warsaw/RTCGA.cnv")
 \end{Sinput}
 \end{Schunk}
 
@@ -204,6 +204,14 @@ where \texttt{cohort} corresponds to a specific Cohort of patients and
 \texttt{package} corresponds to the one of four packages from
 \pkg{RTCGA.data} family.
 
+\section{Few words about RTCGA.tools}\label{few-words-about-rtcga.tools}
+
+\begin{Schunk}
+\begin{Sinput}
+#library(devtools);biocLite("mi2-warsaw/RTCGA.tools") 
+\end{Sinput}
+\end{Schunk}
+
 \newpage
 
 \section{Examples of applications}\label{examples-of-applications}
@@ -220,39 +228,12 @@ cancer, divided into stages of the cancer.
 
 \begin{Schunk}
 \begin{Sinput}
-library(dplyr)
 library(RTCGA.clinical)
-#library(devtools);biocLite("mi2-warsaw/RTCGA.tools") 
 library(RTCGA.tools)
-library(survival)
-library(survMisc)
 
-LUAD.clinical %>%
-   mutate(
-      patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0),
-      barcode = patient.bcr_patient_barcode %>% as.character(),
-      times = ifelse( !is.na(patient.days_to_last_followup),
-                 patient.days_to_last_followup %>% as.character() %>% as.numeric(),
-                 patient.days_to_death %>% as.character() %>% as.numeric() ),
-      stage = RTCGA.tools::mergeStages(LUAD.clinical$patient.stage_event.pathologic_stage)
-   ) %>%
-   rename(
-      therapy = patient.drugs.drug.therapy_types.therapy_type
-   ) %>%
-   filter( !is.na(times) ) -> LUAD.clinical.selected 
-
-LUAD.clinical.selected %>%
-   survfit( Surv(times, patient.vital_status) ~ stage, data = .) %>%
-   survMisc:::autoplot.survfit( titleSize=12, type="CI" ) %>%
-   .[[2]] -> km_plot_luad
+RTCGA.tools::clinicalStageSurvival(LUAD.clinical, xlims = c(0,2000),
+                                   title = "Lung adenocarcinoma")
 \end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Soutput}
-pdf 
-  2 
-\end{Soutput}
 \end{Schunk}
 
 \begin{figure}[h!]
@@ -264,65 +245,103 @@ pdf
 
 \newpage
 
-\subsection{The Cox proportional hazards model with the genes' mutations
-data}\label{the-cox-proportional-hazards-model-with-the-genes-mutations-data}
+\subsection{Boxplots of Genes'
+Expressions}\label{boxplots-of-genes-expressions}
 
-In a simple way one can use previously selected data to merge them with
-genes' mutations data and to compute Cox proportional hazards model
-{[}9{]}. Moreover, the goodness of fit can be checked with the plot of
-Martingale Residuals - Figure \ref{figRes}.
+RTCGA.data family and RTCGA.tools package provide an easy to accees set
+of tools that allow to create useful figures in a simple R command.
+Below is an exmaple of boxplots for logarithm transformation for
+\textbf{ETF1} gene expression, divided on cancer types and 3 most
+popular levels of mutations in gene \textbf{TP53}.
 
 \begin{Schunk}
 \begin{Sinput}
 library(RTCGA.mutations)
-library(ggthemes)
-LUAD.clinical.selected %>%
-      left_join( y = LUAD.mutations %>%
-                    filter( Hugo_Symbol == "TP53") %>%
-                    mutate( barcode = barcode %>% as.character %>% tolower %>% substr(1,12) ) %>%
-                    select( barcode, Variant_Classification),
-                 by = "barcode") %>%
-                    mutate( Variant_Classification = divideTP53(Variant_Classification) ) ->
-   LUAD.clinical.mutations.selected
-
-(coxph(Surv(times, patient.vital_status)~ as.factor(stage)+Variant_Classification,
-      data = LUAD.clinical.mutations.selected) -> LUAD.coxph)
 \end{Sinput}
-\begin{Soutput}
-Call:
-coxph(formula = Surv(times, patient.vital_status) ~ as.factor(stage) + 
-    Variant_Classification, data = LUAD.clinical.mutations.selected)
-
-
-                               coef exp(coef) se(coef)     z       p
-as.factor(stage)2            0.8072    2.2417   0.2328  3.47 0.00053
-as.factor(stage)3            1.3804    3.9764   0.2339  5.90 3.6e-09
-as.factor(stage)4            1.1555    3.1756   0.3414  3.38 0.00071
-Variant_ClassificationOther  0.4397    1.5523   0.3284  1.34 0.18058
-Variant_ClassificationWILD  -0.0365    0.9642   0.2396 -0.15 0.87890
-
-Likelihood ratio test=45.1  on 5 df, p=1.36e-08
-n= 508, number of events= 126 
-   (2 observations deleted due to missingness)
-\end{Soutput}
 \end{Schunk}
 
 \begin{Schunk}
 \begin{Sinput}
-qplot(predict(LUAD.coxph, type="lp"),residuals(LUAD.coxph))+
-   theme_tufte(base_size=20)+
-   xlab("Linear combinations")+
-   ylab("Martingale residuals")+
-   geom_hline(yintercept=0, col ="orange", size = 3)
+mutationsBox(c("BRCA", "HNSC", "LUSC", "PRAD"), "TP53", "ETF1")
 dev.off()
+NA
+NA
+NA
 \end{Sinput}
 \end{Schunk}
 
 \begin{figure}[h!]
 \begin{centering}
-\includegraphics[width=8cm, height=6cm]{res_lp_mart.pdf}
-\caption{\label{figRes}Martingale residuals vs. linear combination of the independent variables for the LUAD cancer's Cox proportional hazard model. }
+\includegraphics[width=8cm, height=6cm]{mutationsBox.pdf}
+\caption{\label{figRes}Caption. }
 \end{centering}
+\end{figure}
+
+\newpage
+
+\subsection{The Pan-cancer analyses of MDM2 mutations for the CNV
+(copy-number-variation)
+data}\label{the-pan-cancer-analyses-of-mdm2-mutations-for-the-cnv-copy-number-variation-data}
+
+\begin{quote}
+Copy-number variations (CNVs)---a form of structural variation---are
+alterations of the DNA of a genome that results in the cell having an
+abnormal or, for certain genes, a normal variation in the number of
+copies of one or more sections of the DNA. CNVs correspond to relatively
+large regions of the genome that have been deleted (fewer than the
+normal number) or duplicated (more than the normal number) on certain
+chromosomes.
+\end{quote}
+
+With access to CNV data one can compare frequency of DNA alterations for
+different cancers. The CNV data is stored in a non-standard format. For
+each patient, for each chromosome the sequence is split into a different
+number of segments, and each segment has score that correspond to the
+multiplication factor. Such dataset has to be first converted to a more
+standard format, with information about multiplication for given gene,
+and then it is possible to compare changes of CNV across clinical
+cohorts / cancers.
+
+In the example below we compare the variation of number of copies for
+the MDM2 gene, which is located on the chromosome 12, positions
+69240000-69200000. First we extract data for the given gene and then we
+plot distributions of CNV for different tumors (single observation is a
+single patient).
+
+As you can see in the figure below, it turns out that in some tumors
+there are patients with very high number of multiplications of this
+gene.
+
+\textbackslash{}begin\{Schunk\} \textbackslash{}begin\{Sinput\}
+library(RTCGA.cnv) \# find all fragments that overlaps with MDM2
+MDM2.scores \textless{}- get.region.cnv.score(chr=``12'',
+start=69240000, stop=69200000) \# only samples from primary tumor
+MDM2.scores \textless{}- MDM2.scores{[}grepl(MDM2.scores\$Sample,
+pattern = ``-01A-''),{]}
+
+\section{remove duplicates}\label{remove-duplicates}
+
+MDM2.scores\(Sample <- substr(MDM2.scores\)Sample, 1, 12) MDM2.scores
+\textless{}- MDM2.scores{[}!duplicated(MDM2.scores\$Sample),{]}
+MDM2.scores\(cohort <- gsub(MDM2.scores\)cohort, pattern=``.cnv'',
+replacement = ``'')
+
+\section{sort along average CNV}\label{sort-along-average-cnv}
+
+MDM2.scores\(cohort <- reorder(MDM2.scores\)cohort,
+MDM2.scores\$Segment\_Mean, median, na.rm=TRUE)
+
+\section{plotit}\label{plotit}
+
+library(ggplot2) ggplot() + geom\_boxplot(data=MDM2.scores,
+aes(y=2*2\^{}Segment\_Mean, x=cohort, fill=cohort)) + coord\_flip() +
+theme\_bw() + theme(legend.position=``none'') + ylab(``Average number of
+CNV copies for MDM2 gene'') + scale\_y\_continuous(trans=``log2'') +
+xlab(``'') \textbackslash{}end\{Sinput\} \textbackslash{}end\{Schunk\}
+
+\begin{figure}[h!]
+\includegraphics[width=12cm]{cnv.pdf}
+\caption{\label{biplot2}The boxplot for 31 cancer types with CNV copies of MDM2 gene.}
 \end{figure}
 
 \newpage
@@ -332,36 +351,20 @@ data}\label{the-principal-components-analysis-for-the-rnaseq-data}
 
 One can also perform a Principal Components Analysis, after binding
 rnaseq data for few random cancer types like below. It can be seen that
-genes' expressions amongs those cancers vary and samples group in view
-of cancer type.
+genes' expressions amongs those cancers (\emph{Adrenocortical carcinoma,
+Cholangiocarcinoma, Glioma, Pheochromocytoma + Paraganglioma and Uveal
+Melanoma}) vary and samples group in view of cancer type.
 
 \begin{Schunk}
 \begin{Sinput}
-rbind(ACC.rnaseq, CHOL.rnaseq, GBM.rnaseq, PCPG.rnaseq, UVM.rnaseq) -> rnaseq_sample
-# which columns contain only zeros
-rnaseq_sample[,-1] %>% colSums() -> rnaseq_col_sums
-which(rnaseq_col_sums == 0) -> columns_with_only0
-# pca
-rnaseq_sample[, -c(1,columns_with_only0+1)] %>%
-   prcomp( scale = TRUE ) -> PCA
-# labels for pca
-lapply(list(ACC.rnaseq, CHOL.rnaseq, GBM.rnaseq, PCPG.rnaseq, UVM.rnaseq), nrow) -> rnaseq_nrow
-mapply(rep, 
-       c("ACC.rnaseq", "CHOL.rnaseq", "GBM.rnaseq", "PCPG.rnaseq", "UVM.rnaseq"), 
-       rnaseq_nrow) %>%
-   unlist -> rnaseq_pca_labels
-# biplot
-#library(devtools);install_github("vqv/ggbiplot")
-library(ggbiplot)
-rownames(PCA$rotation) <- 1:nrow(PCA$rotation)
-ggbiplot(PCA, obs.scale = 1, var.scale = 1,
-  groups = rnaseq_pca_labels, ellipse = TRUE, circle = TRUE, var.axes=FALSE) +
-  theme(legend.direction = 'horizontal', legend.position = 'top') -> biplot_rnaseq
+library(RTCGA.rnaseq)
+
+rnaseqBiplot(cohorts = c("ACC", "CHOL", "GBM", "PCPG", "UVM"))
 \end{Sinput}
 \end{Schunk}
 
 \begin{figure}[h!]
-\includegraphics[width=12cm]{biplot_rnaseq.pdf}
+\includegraphics[width=12cm]{rnaseq_biplot.pdf}
 \caption{\label{biplot2}The biplot for 2 main components of the principal component analysis of genes' expressions data for 5 various cancer types.}
 \end{figure}
 

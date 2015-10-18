@@ -22,12 +22,9 @@ output: rticles::rjournal_article
 
 ```{r, echo=FALSE, message=FALSE, warning = FALSE}
 library(knitr)
-opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), cache = TRUE)
+opts_chunk$set(comment="", message=FALSE, warning = FALSE, tidy.opts=list(keep.blank.line=TRUE, width.cutoff=150),options(width=150), eval = FALSE)
 ```
 
-```{r}
-
-```
 
 
 # Motivation
@@ -51,7 +48,7 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("RTCGA.clinical") 
 biocLite("RTCGA.rnaseq") 
 biocLite("RTCGA.mutations") 
-biocLite("RTCGA.cnv") 
+biocLite("RTCGA.cnv") # or developers version biocLite("mi2-warsaw/RTCGA.cnv")
 ```
 
 # Patient's barcode as a key to merge data 
@@ -196,6 +193,12 @@ where `cohort` corresponds to a specific Cohort of patients and `package` corres
 
 # Few words about RTCGA.tools
 
+
+```{r}
+#library(devtools);biocLite("mi2-warsaw/RTCGA.tools") 
+```
+
+
 \newpage
 
 # Examples of applications
@@ -203,21 +206,19 @@ where `cohort` corresponds to a specific Cohort of patients and `package` corres
 ## The Kaplan-Meier estimate of the survival curves with the clinical data
 \pkg{RTCGA.data} family is excellent when one researches in a field of survival analysis and genomics.
 Survival times for patients are included in clinical datasets. The following example plots Kaplan-Meier [5] estimates of the survival functions for patients suffering from LUAD cancer, divided into stages of the cancer.
-```{r, eval=TRUE, cache=TRUE, results='hide'}
-library(dplyr)
+```{r, eval=FALSE, results='hide'}
 library(RTCGA.clinical)
-#library(devtools);biocLite("mi2-warsaw/RTCGA.tools") 
 library(RTCGA.tools)
-library(survival)
-library(survMisc)
 
-RTCGA.tools::clinicalStageSurvival(LUAD.clinical, xlims = c(0,2000))
+RTCGA.tools::clinicalStageSurvival(LUAD.clinical, xlims = c(0,2000),
+                                   title = "Lung adenocarcinoma")
 
 ```
 
 ```{r, echo = FALSE}
 pdf(file = "km_plot_luad.pdf")
-RTCGA.tools::clinicalStageSurvival(LUAD.clinical, xlims = c(0,2000))
+RTCGA.tools::clinicalStageSurvival(LUAD.clinical, xlims = c(0,2000),
+                                   title = "Lung adenocarcinoma")
 dev.off()
 ```
 
@@ -230,51 +231,17 @@ dev.off()
 
 \newpage
 
-## The Cox proportional hazards model with the genes' mutations data
+## Boxplots of Genes' Expressions
 
-## MUTATIONS EXAMPLE : mutationSBoxplotexpression(c("BRCA", "HNSC", "LUSC", "PRAD", "STES"), "TP53", "ETF1")
+RTCGA.data family and RTCGA.tools package provide an easy to accees set of tools that allow to create useful figures in a simple R command. Below is an exmaple of boxplots for logarithm transformation for \textbf{ETF1} gene expression, divided on cancer types and 3 most popular levels of mutations in gene \textbf{TP53}.
 
-In a simple way one can use previously selected data to merge them with genes' mutations data and to compute Cox proportional hazards model [9]. Moreover, the goodness of fit can be checked with the plot of Martingale Residuals - Figure \ref{figRes}.
-
-```{r, eval=TRUE, cache=TRUE, warning=FALSE}
+```{r, eval=FALSE, warning=FALSE}
 library(RTCGA.mutations)
-library(ggthemes)
-LUAD.clinical %>%
-   mutate(
-      patient.vital_status = ifelse(LUAD.clinical$patient.vital_status %>% as.character() =="dead",1,0),
-      barcode = patient.bcr_patient_barcode %>% as.character(),
-      times = ifelse( !is.na(patient.days_to_last_followup),
-                 patient.days_to_last_followup %>% as.character() %>% as.numeric(),
-                 patient.days_to_death %>% as.character() %>% as.numeric() ),
-      stage = stri_extract_all_regex(LUAD.clinical$patient.stage_event.pathologic_stage,
-                                     pattern = "i|v") %>%
-         lapply(stri_flatten) %>%
-         unlist
-   ) %>%
-   rename(
-      therapy = patient.drugs.drug.therapy_types.therapy_type
-   ) %>%
-   filter( !is.na(times) ) -> LUAD.clinical.selected 
-LUAD.clinical.selected %>%
-      left_join( y = LUAD.mutations %>%
-                    filter( Hugo_Symbol == "TP53") %>%
-                    mutate( barcode = barcode %>% as.character %>% tolower %>% substr(1,12) ) %>%
-                    select( barcode, Variant_Classification),
-                 by = "barcode") %>%
-                    mutate( Variant_Classification = divideTP53(Variant_Classification) ) ->
-   LUAD.clinical.mutations.selected
-
-(coxph(Surv(times, patient.vital_status)~ as.factor(stage)+Variant_Classification,
-      data = LUAD.clinical.mutations.selected) -> LUAD.coxph)
 ```
 
 ```{r, echo = 2:6, results='hide'}
-pdf( file = "res_lp_mart.pdf" )
-qplot(predict(LUAD.coxph, type="lp"),residuals(LUAD.coxph))+
-   theme_tufte(base_size=20)+
-   xlab("Linear combinations")+
-   ylab("Martingale residuals")+
-   geom_hline(yintercept=0, col ="orange", size = 3)
+pdf( file = "mutationsBox.pdf", width = 10 )
+mutationsBox(c("BRCA", "HNSC", "LUSC", "PRAD"), "TP53", "ETF1")
 dev.off()
 ```
 
@@ -282,8 +249,8 @@ dev.off()
 
 \begin{figure}[h!]
 \begin{centering}
-\includegraphics[width=8cm, height=6cm]{res_lp_mart.pdf}
-\caption{\label{figRes}Martingale residuals vs. linear combination of the independent variables for the LUAD cancer's Cox proportional hazard model. }
+\includegraphics[width=8cm, height=6cm]{mutationsBox.pdf}
+\caption{\label{figRes}Caption. }
 \end{centering}
 \end{figure}
 
@@ -357,7 +324,7 @@ dev.off()
 
 
 \begin{figure}[h!]
-\includegraphics[width=12cm]{biplot_rnaseq.pdf}
+\includegraphics[width=12cm]{rnaseq_biplot.pdf}
 \caption{\label{biplot2}The biplot for 2 main components of the principal component analysis of genes' expressions data for 5 various cancer types.}
 \end{figure}
 
