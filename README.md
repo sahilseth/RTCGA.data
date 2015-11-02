@@ -26,8 +26,8 @@ if (!require(devtools)) {
    install.packages("devtools")
    require(devtools)
 }
-install_github("mi2-warsaw/RTCGA.data/PANCAN12")
-install_github("mi2-warsaw/RTCGA.data/cnv")
+install_github("mi2-warsaw/RTCGA.data/RTCGA.PANCAN12")
+install_github("mi2-warsaw/RTCGA.data/RTCGA.cnv")
 ```
 
 <h5> The list of available datasets: </h5>
